@@ -23,14 +23,14 @@ const intro = magpieViews.view_generator("intro", {
   trials: 1,
   name: 'intro',
   // If you use JavaScripts Template String `I am a Template String`, you can use HTML <></> and javascript ${} inside
-  text: `This is a sample introduction view.
+  text: `We are following up on a previously published paper that looked at how people feel about moral dilemmas.
             <br />
             <br />
-            The introduction view welcomes the participant and gives general information
-            about the experiment. You are in the <strong>${coin}</strong> group.
+            In the previous paper, a moral dilemma was described that involved two possible courses of actions. Participants chose which action they preferred and had to rate how they would feel about performing that action.
+            You are in the <strong>${coin}</strong> group.
             <br />
             <br />
-            This is a minimal experiment with one forced choice view. It can serve as a starting point for programming your own experiment.`,
+            In this study, you will be presented with a scenario describing a moral dilemma. You will choose which action you would take and then provide a rating of how good or bad you imagine you would feel after taking that action`,
   buttonText: 'begin the experiment'
 });
 
@@ -43,7 +43,7 @@ const instructions = magpieViews.view_generator("instructions", {
             <br />
             <br />
             Tell your participants what they are to do here.`,
-  buttonText: 'go to trials'
+  buttonText: 'next'
 });
 
 
@@ -101,7 +101,11 @@ const thanks = magpieViews.view_generator("thanks", {
 * https://magpie-ea.github.io/magpie-docs/01_designing_experiments/01_template_views/#trial-views
 */
 
-
+const choose_statement = magpieViews.view_generator("forced_choice", {
+  trials: statements.forced_choice.length,
+  name: "choose_statement",
+  data: statements.forced_choice,
+})
 
 const main_grouping = magpieViews.view_generator("forced_choice", {
   trials: statement_trials.forced_choice.length,
