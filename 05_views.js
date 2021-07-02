@@ -102,17 +102,17 @@ const thanks = magpieViews.view_generator("thanks", {
 */
 
 
-// Here, we initialize a normal forced_choice view
-const forced_choice_2A = magpieViews.view_generator("forced_choice", {
-  // This will use all trials specified in `data`, you can user a smaller value (for testing), but not a larger value
-  trials: trial_info.forced_choice.length,
-  // name should be identical to the variable name
-  name: 'forced_choice_2A',
-  data: trial_info.forced_choice,
-  // you can add custom functions at different stages through a view's life cycle
-  // hook: {
-  //     after_response_enabled: check_response
-  // }
+
+const main_grouping = magpieViews.view_generator("forced_choice", {
+  trials: statement_trials.forced_choice.length,
+  name: "main_grouping",
+  data: statement_trials.forced_choice,
+});
+
+const moral_dilemma = magpieViews.view_generator("forced_choice", {
+  trials: dilemma_trials.forced_choice.length,
+  name: "moral_dilemma",
+  data: dilemma_trials.forced_choice,
 });
 
 // There are many more templates available:
