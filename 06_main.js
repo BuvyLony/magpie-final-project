@@ -19,7 +19,7 @@ $("document").ready(function() {
             instructions,
             post_test,
             choose_statement,
-            main_grouping,
+            rate_statement,
             moral_dilemma,
             thanks,
         ],
@@ -38,7 +38,7 @@ $("document").ready(function() {
         progress_bar: {
             in: [
                 // list the view-names of the views for which you want a progress bar
-                main_grouping.name,
+                moral_dilemma.name,
             ],
              // Possible styles are "default", "separate" and "chunks"
             style: "separate",

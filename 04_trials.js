@@ -6,21 +6,31 @@ const statements = {
       question: "Which issue do you care about the most?",
       option1: "Gun Control",
       option2: "Feminism",
+      option3: "Joe Biden",
+      option4: "Immigration",
+      option5: "Transgender Rights",
+      option6: "Drug legalization",
+      option7: "Colin Kaepernik kneeling during the national anthem",
+      option8: "Buying and wearing fur",
+      option9: "Taxing religious organizations",
     }
   ]
 };
 
+
+
+
 const statement_trials = {
-  forced_choice: [
+  rate_statement: [
     {
       question: "Adults should have the right to carry a concealed handgun",
-      option1: "agree",
-      option2: "disagree"
+      optionLeft: "agree",
+      optionRight: "disagree"
     },
     {
       question: "Feminism is important and beneficial to modern society",
-      option1: "agree",
-      option2: "disagree"
+      optionLeft: "agree",
+      optionRight: "disagree"
     },
   ]
 };
