@@ -30,11 +30,11 @@ const instructions = magpieViews.view_generator("instructions", {
 
 
 // In the post test questionnaire you can ask your participants addtional questions
-const post_test = magpieViews.view_generator("post_test", {
+const post_test_customized = magpieViews.view_generator("post_test", {
   trials: 1,
-  name: 'post_test',
+  name: 'post_test_customized',
   title: 'Additional information',
-  text: 'Answering the following questions is optional, but your answers will help us analyze our results.'
+  text: 'Answering the following questions is optional, but your answers will help us analyze our results.',
 
   // You can change much of what appears here, e.g., to present it in a different language, as follows:
   // buttonText: 'Weiter',
@@ -42,7 +42,8 @@ const post_test = magpieViews.view_generator("post_test", {
   // gender_question: 'Geschlecht',
   // gender_male: 'männlich',
   // gender_female: 'weiblich',
-  // gender_other: 'divers',
+  gender_other: 'non-binary',
+  gender_blabla: 'not'
   // edu_question: 'Höchster Bildungsabschluss',
   // edu_graduated_high_school: 'Abitur',
   // edu_graduated_college: 'Hochschulabschluss',
@@ -50,6 +51,47 @@ const post_test = magpieViews.view_generator("post_test", {
   // languages_question: 'Muttersprache',
   // languages_more: '(in der Regel die Sprache, die Sie als Kind zu Hause gesprochen haben)',
   // comments_question: 'Weitere Kommentare'
+
+},
+                                                        
+{
+    answer_container_generator: function (config, CT) {
+        const quest = magpieUtils.view.fill_defaults_post_test(config);
+        return `<form>
+                    <p class='magpie-view-text'>
+                        <label for="age">${quest.age.title}:</label>
+                        <input type="number" name="age" min="18" max="110" id="age" />
+                    </p>
+                    <p class='magpie-view-text'>
+                        <label for="gender">${quest.gender.title}:</label>
+                        <select id="gender" name="gender">
+                            <option></option>
+                            <option value="${quest.gender.male}">${quest.gender.male}</option>
+                            <option value="${quest.gender.female}">${quest.gender.female}</option>
+                            <option value="${quest.gender.other}">${quest.gender.other}</option>
+                            <option value="${quest.gender.blabla}">${quest.gender.blabla}</option>
+                        </select>
+                    </p>
+                    <p class='magpie-view-text'>
+                        <label for="education">${quest.edu.title}:</label>
+                        <select id="education" name="education">
+                            <option></option>
+                            <option value="${quest.edu.graduated_high_school}">${quest.edu.graduated_high_school}</option>
+                            <option value="${quest.edu.graduated_college}">${quest.edu.graduated_college}</option>
+                            <option value="${quest.edu.higher_degree}">${quest.edu.higher_degree}</option>
+                        </select>
+                    </p>
+                    <p class='magpie-view-text'>
+                        <label for="languages" name="languages">${quest.langs.title}:<br /><span>${quest.langs.text}</</span></label>
+                        <input type="text" id="languages"/>
+                    </p>
+                    <p class="magpie-view-text">
+                        <label for="comments">${quest.comments.title}</label>
+                        <textarea name="comments" id="comments" rows="6" cols="40"></textarea>
+                    </p>
+                    <button id="next" class='magpie-view-button'>${config.button}</button>
+            </form>`
+    }
 });
 
 // The 'thanks' view is crucial; never delete it; it submits the results!
