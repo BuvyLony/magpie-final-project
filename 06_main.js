@@ -13,12 +13,14 @@ $("document").ready(function() {
     // e.g. >> window.magpie_monitor or window.magpie_monitor.findNextView()
     // in all other modes null will be returned
     window.magpie_monitor = magpieInit({
-        // You have to specify all views you want to use in this experiment and the order of them
+        // You have to specify all views you want to use in this experiment and the order of them#
+
+        // replaced issue selection with custom_issue selection view, to be able to set flag-variable
         views_seq: [
             intro,
             instructions,
             post_test_customized,
-            choose_statement,
+            custom_choose_issue_view,
             rate_statement,
             moral_dilemma,
             thanks,

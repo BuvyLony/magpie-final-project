@@ -108,6 +108,7 @@ const moral_dilemma = magpieViews.view_generator("forced_choice", {
   data: dilemma_trials.forced_choice,
 });
 
+
 const choose_statement = magpieViews.view_generator(
     "forced_choice",
     {
@@ -138,16 +139,30 @@ const choose_statement = magpieViews.view_generator(
                <label for='o9' class='magpie-response-buttons'>${config.data[CT].option9}</label>
                <input type='radio' name='answer' id='o9' value=${config.data[CT].option9} />
                </div>`;
-  }
     }
+  }
 );
 
+// set value of data according to flag-variable
+// (alternatively can also be called with the function set_issue() )
+if (flagToSet === "gun control") {
+  rate_data = statement_trials.rate_statement_gun;
+} else if (flagToSet === "feminism") {
+  rate_data = statement_trials.rate_statement_feminism;
+  rate_statement.data = rate_data;
+} else {
+  console.log("else");
+  rate_data = statement_trials.rate_statement_gun;
+}
+
+// set data to data-variable in order to use previously chosen issue
+// PROBLEM: does not refresh dynamically, is only initiated once in the beginning!
 const rate_statement = magpieViews.view_generator(
   "rating_scale",
   {
-    trials: statement_trials.rate_statement.length,
+    trials: 1,
     name: "rate_statement",
-    data: statement_trials.rate_statement
+    data: rate_data,
   },
   {
     rating_scale: function(config, CT) {
@@ -171,3 +186,10 @@ const rate_statement = magpieViews.view_generator(
     }
   }
 );
+
+// instantiation of view for issue selection
+const custom_choose_issue_view = custom_choose_issue({
+  trials: 1,
+  name: 'custom_choose_issue_view',
+  data: 'issues',
+}); 

@@ -19,20 +19,23 @@ const statements = {
 
 
 
-
+// split data into issue-blocks, for easier access
+// (ToDo: Implement missing statements)
 const statement_trials = {
-  rate_statement: [
+  rate_statement_gun: [
     {
       question: "Adults should have the right to carry a concealed handgun",
       optionLeft: "agree",
       optionRight: "disagree"
-    },
+    }
+  ],
+  rate_statement_feminism: [
     {
       question: "Feminism is important and beneficial to modern society",
       optionLeft: "agree",
       optionRight: "disagree"
-    },
-  ]
+    }
+  ],
 };
 
 const dilemma_trials = {
