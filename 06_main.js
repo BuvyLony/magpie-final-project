@@ -17,7 +17,7 @@ $("document").ready(function() {
         views_seq: [
             intro,
             instructions,
-            post_test,
+            post_test_customized,
             choose_statement,
             rate_statement,
             moral_dilemma,
