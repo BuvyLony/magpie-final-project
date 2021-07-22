@@ -13,6 +13,9 @@ var issueFlag = null;
 // variable for statement-data selection
 var rate_data = null;
 
+// variable for choice of behavior
+var behaviorChoiceFlag = "do nothing";
+
 /* Helper functions
 *
 *

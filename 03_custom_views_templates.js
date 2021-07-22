@@ -10,7 +10,7 @@
 // if it is an trial view it also makes sense to call magpie.trial_data.push(trial_data) to save the trial information
 
 // custom function to build screen for issue selection
-const custom_choose_issue = function(config) {
+const custom_selection = function(config) {
     const view = {
       name: config.name,
       CT:0,
@@ -255,7 +255,7 @@ const custom_slider_rating = function(config) {
       } else if(issueFlag === "Feminism"){
         document.getElementById("p1").innerHTML = "Feminism is important and beneficial to modern society";
       } else if (issueFlag === "Joe Biden") {
-        document.getElementById("p1").innerHTML = "Joe Biden being president is good for the United States at this time”";
+        document.getElementById("p1").innerHTML = "Joe Biden being president is good for the United States at this time";
       } else if(issueFlag === "Immigration and Dreamers"){
         document.getElementById("p1").innerHTML = "Dreamers (undocumented immigrants who came to the US as children) should be allowed to stay in the United States";
       } else if(issueFlag === "Transgender rights"){
@@ -465,6 +465,242 @@ const custom_slider_rating = function(config) {
             trial_number: CT + 1,
             statement: document.getElementById("p1").innerHTML,
             response: "5",
+          };
+
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+      })();
+    }
+  };
+  return view;
+};
+
+// Custom function to build screen for moral dilemma 
+const moral_dilemma = function(config) {
+  const view = { 
+    name: config.name,
+    CT:0,
+    trials: config.trials,
+    render: function(CT, magpie) {
+      /* html code
+      Displays the moral dilemma and either both ingroup and outgroup norm or only ingroup norm. If both, the order is randomized. Whether ingroup or outgroup
+      chose a certain behavior is also randomized.
+      TODO: randomization
+      include all issues
+      change scale to "Would you: look at example script
+      set behaviorChoiceFlag flag according to choice*/
+      $("main").html(`<div class='magpie-view' style="float:center;">
+      <center>
+      <p id="p1" style="margin-top: 1cm;" >Imagine you have witnessed a man rob a bank. However, you then saw him do something unexpected with the money. 
+      He donated it all to a run-down orphanage that would benefit greatly from the money. 
+      You must decide whether to call the police and report the robber or do nothing and leave the robber alone.</p>
+      </center>
+
+      <p id="ingroup_norm" style="margin-top: 1cm;" >Test</p>
+      <p id="outgroup_norm" style="margin-top: 1cm;" >Test</p>
+      `);
+
+      /* Read out which social issue was previously chosen in order to display norm(s). */
+      if(issueFlag === "Gun control"){
+        document.getElementById("ingroup_norm").innerHTML = "Approximately 60% of participants who agreed with you about gun restrictions chose to (do nothing and leave the robber alone / call the polive and report the robber).";
+        document.getElementById("outgroup_norm").innerHTML = "Approximately 85% of participants who did not agree with you about gun restrictions chose to (do nothing and leave the robber alone / call the polive and report the robber).";
+      } else if(issueFlag === "Feminism"){
+        document.getElementById("p1").innerHTML = "Feminism is important and beneficial to modern society";
+      } else if (issueFlag === "Joe Biden") {
+        document.getElementById("p1").innerHTML = "Joe Biden being president is good for the United States at this time";
+      } else if(issueFlag === "Immigration and Dreamers"){
+        document.getElementById("p1").innerHTML = "Dreamers (undocumented immigrants who came to the US as children) should be allowed to stay in the United States";
+      } else if(issueFlag === "Transgender rights"){
+        document.getElementById("p1").innerHTML = "Transgender people should be allowed to use the bathrooms of the gender they identify as";
+      } else if (issueFlag === "Drug legalization") {
+        document.getElementById("p1").innerHTML = "Possession of drugs should be legalized";
+      } else if (issueFlag === "Colin Kaepernick kneeling during the national anthem") {
+        document.getElementById("p1").innerHTML = "Colin Kaepernick was wrong to kneel during the national anthem";
+      } else if (issueFlag === "Buying and wearing fur") {
+        document.getElementById("p1").innerHTML = "Buying and wearing fur is wrong";
+      } else if (issueFlag === "Taxing religious organizations") {
+        document.getElementById("p1").innerHTML = "Religious organizations should be taxed";
+      } else {
+        throw new ReferenceError("Variable issueFlag seems to have a no or a faulty value.");
+      }
+    
+
+      /* js code 
+      Response handler for when rating is clicked on screen. For each button, the name of the trial, the statement and response are 
+      saved to the trial_data, trial counter is incremented by 1 and the next view is toggled. */ 
+      // button 1 - on click
+      (function clickHandler1() {
+        const button1 = document.getElementById("button1");
+        button1.addEventListener("click", event=> {
+
+          let trial_data = {
+            trial_name: "statement rating",
+            trial_number: CT + 1,
+            statement: document.getElementById("p1").innerHTML,
+            response: "-5",
+          };
+
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+      })();
+    }
+  };
+  return view;
+};
+
+// Custom function to build screen for moral dilemma
+const rating_choice = function(config) {
+  const view = { 
+    name: config.name,
+    CT:0,
+    trials: config.trials,
+    render: function(CT, magpie) {
+      /* html code
+      Displays the chosen behavior and a 7 point likert scale asking to rate how this made them feel.
+      TODO: build pretty likert scale with statements and also change in statement rating view */
+       $("main").html(`<div class='magpie-view' style="float:center;">
+      <center>
+      <p id="chosen_behavior" style="margin-top: 1cm;" >Test</p>
+
+      <center>
+      <div style="padding: 40px; width: 20px; display: inline-block;"> <button id="button1">Very good</button> </div>
+      <div style="padding: 40px; width: 20px; display: inline-block;"> <button id="button2">Moderately good</button> </div>
+      <div style="padding: 40px; width: 20px; display: inline-block;"> <button id="button3">Slightly good</button> </div>
+      <div style="padding: 40px; width: 20px; display: inline-block;"> <button id="button4">Neither good nor bad</button> </div>
+      <div style="padding: 40px; width: 20px; display: inline-block;"> <button id="button5">Slightly bad</button> </div>
+      <div style="padding: 40px; width: 20px; display: inline-block;"> <button id="button5">Moderately bad</button> </div>
+      <div style="padding: 40px; width: 20px; display: inline-block;"> <button id="button5">Very bad</button> </div>
+      </center>
+      `);
+
+      /* Read out which social issue was previously chosen in order to display text. */
+      if(behaviorChoiceFlag === "do nothing"){
+        document.getElementById("chosen_behavior").innerHTML = "You chose to do nothing and leave the robber alone. If you did do nothing and leave the robber alone, how yould you expect to feel:";
+      } else if(behaviorChoiceFlag === "call police"){
+        document.getElementById("chosen_behavior").innerHTML = "You chose to call the police and report the robber. If you did call the police and report the robber, how yould you expect to feel:";
+      } else {
+        throw new ReferenceError("Variable behaviorChoiceFlag seems to have a no or a faulty value.");
+      };
+    
+
+      /* js code 
+      Response handler for when rating is clicked on screen. For each button, the name of the trial, the statement and response are 
+      saved to the trial_data, trial counter is incremented by 1 and the next view is toggled. */ 
+      // button 1 - on click
+      (function clickHandler1() {
+        const button1 = document.getElementById("button1");
+        button1.addEventListener("click", event=> {
+
+          let trial_data = {
+            trial_name: "behavior rating",
+            trial_number: CT + 1,
+            response: "Very good",
+          };
+
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+      })();
+
+      // button 2 - on click
+      (function clickHandler2() {
+        const button2 = document.getElementById("button2");
+        button1.addEventListener("click", event=> {
+
+          let trial_data = {
+            trial_name: "behavior rating",
+            trial_number: CT + 1,
+            response: "Moderately good",
+          };
+
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+      })();
+
+      // button 3 - on click
+      (function clickHandler3() {
+        const button3 = document.getElementById("button3");
+        button1.addEventListener("click", event=> {
+
+          let trial_data = {
+            trial_name: "behavior rating",
+            trial_number: CT + 1,
+            response: "Slightly good",
+          };
+
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+      })();
+
+      // button 4 - on click
+      (function clickHandler4() {
+        const button4 = document.getElementById("button4");
+        button1.addEventListener("click", event=> {
+
+          let trial_data = {
+            trial_name: "behavior rating",
+            trial_number: CT + 1,
+            response: "Neither good nor bad",
+          };
+
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+      })();
+
+      // button 5 - on click
+      (function clickHandler5() {
+        const button5 = document.getElementById("button5");
+        button1.addEventListener("click", event=> {
+
+          let trial_data = {
+            trial_name: "behavior rating",
+            trial_number: CT + 1,
+            response: "Slightly bad",
+          };
+
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+      })();
+
+      // button 6 - on click
+      (function clickHandler6() {
+        const button6 = document.getElementById("button6");
+        button1.addEventListener("click", event=> {
+
+          let trial_data = {
+            trial_name: "behavior rating",
+            trial_number: CT + 1,
+            response: "Moderately bad bad",
+          };
+
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+      })();
+
+      // button 7 - on click
+      (function clickHandler7() {
+        const button7 = document.getElementById("button7");
+        button1.addEventListener("click", event=> {
+
+          let trial_data = {
+            trial_name: "behavior rating",
+            trial_number: CT + 1,
+            response: "Very bad",
           };
 
           // push data to csv

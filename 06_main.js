@@ -18,11 +18,11 @@ $("document").ready(function() {
         // replaced issue selection with custom_issue selection view, to be able to set flag-variable
         views_seq: [
             intro,
-            instructions,
             post_test_customized,
-            custom_choose_issue_view,
-            custom_slider_rating_A2,
-            moral_dilemma,
+            issue_selection,
+            statement_rating,
+            //moral_dilemma_view,
+            rating_choice_view,
             thanks,
         ],
         // Here, you can specify all information for the deployment
