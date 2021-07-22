@@ -150,7 +150,6 @@ if (issueFlag === "gun control") {
   rate_data = statement_trials.rate_statement_feminism;
   rate_statement.data = rate_data;
 } else {
-  console.log("else");
   rate_data = statement_trials.rate_statement_gun;
 }
 
