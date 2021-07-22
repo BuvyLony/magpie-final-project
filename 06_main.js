@@ -21,7 +21,7 @@ $("document").ready(function() {
             instructions,
             post_test_customized,
             custom_choose_issue_view,
-            rate_statement,
+            custom_slider_rating_A2,
             moral_dilemma,
             thanks,
         ],

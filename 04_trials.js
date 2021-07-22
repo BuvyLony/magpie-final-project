@@ -18,9 +18,6 @@ const statements = {
 };
 
 
-
-// split data into issue-blocks, for easier access
-// (ToDo: Implement missing statements)
 const statement_trials = {
   rate_statement_gun: [
     {

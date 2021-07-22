@@ -144,10 +144,9 @@ const choose_statement = magpieViews.view_generator(
 );
 
 // set value of data according to flag-variable
-// (alternatively can also be called with the function set_issue() )
-if (flagToSet === "gun control") {
+if (issueFlag === "gun control") {
   rate_data = statement_trials.rate_statement_gun;
-} else if (flagToSet === "feminism") {
+} else if (issueFlag === "feminism") {
   rate_data = statement_trials.rate_statement_feminism;
   rate_statement.data = rate_data;
 } else {
@@ -156,7 +155,7 @@ if (flagToSet === "gun control") {
 }
 
 // set data to data-variable in order to use previously chosen issue
-// PROBLEM: does not refresh dynamically, is only initiated once in the beginning!
+// PROBLEM: does not refresh dynamically, is only initiated once in the beginning! -> build custom function
 const rate_statement = magpieViews.view_generator(
   "rating_scale",
   {
@@ -187,9 +186,16 @@ const rate_statement = magpieViews.view_generator(
   }
 );
 
-// instantiation of view for issue selection
+// instantiation of customized view for statement rating
+const custom_slider_rating_A2 = custom_slider_rating({
+  trials: 1,
+  name: 'custom_slider_rating_A2',
+})
+
+// instantiation of customized view for issue selection
 const custom_choose_issue_view = custom_choose_issue({
   trials: 1,
   name: 'custom_choose_issue_view',
   data: 'issues',
 }); 
+

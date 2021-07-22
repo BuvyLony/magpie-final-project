@@ -8,7 +8,7 @@ const coin = _.sample(["head", "tail"]); // You can determine global (random) pa
 // Declare your variables here
 
 // flag for issue selection
-var flagToSet = null;
+var issueFlag = null;
 
 // variable for statement-data selection
 var rate_data = null;
@@ -36,9 +36,9 @@ const generateID = function(len) {
 // optional function for statement-data selection
 const set_issue = function(){
     var rate_data = null;
-    if (flagToSet === "gun control") {
+    if (issueFlag === "gun control") {
         rate_data = statement_trials.rate_statement_gun;
-      } else if (flagToSet === "feminism") {
+      } else if (issueFlag === "feminism") {
         rate_data = statement_trials.rate_statement_feminism;
         rate_statement.data = rate_data;
       } else {
