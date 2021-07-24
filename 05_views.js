@@ -119,3 +119,11 @@ const rating_choice_view = rating_choice({
   trials: 1,
   name: "rating_choice_view",
 });
+
+//understanding_check_view
+
+// Instantiation of the single item social identification measure
+const identification_measure = single_item_social_identification({
+  trials: 2,
+  name: "identification_measure",
+});

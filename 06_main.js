@@ -21,8 +21,10 @@ $("document").ready(function() {
             post_test_customized,
             issue_selection,
             statement_rating,
-            //moral_dilemma_view,
+            moral_dilemma_view,
             rating_choice_view,
+            //understanding_check_view,
+            identification_measure,
             thanks,
         ],
         // Here, you can specify all information for the deployment
