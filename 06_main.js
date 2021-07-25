@@ -18,12 +18,12 @@ $("document").ready(function() {
         // replaced issue selection with custom_issue selection view, to be able to set flag-variable
         views_seq: [
             intro,
-            post_test_customized,
+            pre_test_customized,
             issue_selection,
             statement_rating,
             moral_dilemma_view,
             rating_choice_view,
-            //understanding_check_view,
+            iterative_dropdown_choice,
             identification_measure,
             thanks,
         ],

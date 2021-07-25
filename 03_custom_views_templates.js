@@ -43,7 +43,7 @@ const custom_selection = function(config) {
           let trial_data = {
             trial_name: 'selected issue',
             trial_number: CT + 1,
-            flag: issueFlag,
+            response: issueFlag,
           };
 
           // push data to csv
@@ -63,7 +63,7 @@ const custom_selection = function(config) {
           let trial_data = {
             trial_name: 'issue',
             trial_number: CT + 1,
-            flag: issueFlag,
+            response: issueFlag,
           };
   
           // push data to csv
@@ -82,7 +82,7 @@ const custom_selection = function(config) {
           let trial_data = {
             trial_name: 'issue',
             trial_number: CT + 1,
-            flag: issueFlag,
+            response: issueFlag,
           };
   
           // push data to csv
@@ -101,7 +101,7 @@ const custom_selection = function(config) {
             let trial_data = {
             trial_name: 'issue',
             trial_number: CT + 1,
-            flag: issueFlag,
+            response: issueFlag,
             };
     
             // push data to csv
@@ -120,7 +120,7 @@ const custom_selection = function(config) {
           let trial_data = {
             trial_name: 'issue',
             trial_number: CT + 1,
-            flag: issueFlag,
+            response: issueFlag,
           };
   
           // push data to csv
@@ -139,7 +139,7 @@ const custom_selection = function(config) {
           let trial_data = {
             trial_name: 'issue',
             trial_number: CT + 1,
-            flag: issueFlag,
+            response: issueFlag,
           };
   
           // push data to csv
@@ -158,7 +158,7 @@ const custom_selection = function(config) {
           let trial_data = {
             trial_name: 'issue',
             trial_number: CT + 1,
-            flag: issueFlag,
+            response: issueFlag,
           };
   
           // push data to csv
@@ -177,7 +177,7 @@ const custom_selection = function(config) {
           let trial_data = {
             trial_name: 'issue',
             trial_number: CT + 1,
-            flag: issueFlag,
+            response: issueFlag,
           };
   
           // push data to csv
@@ -196,7 +196,7 @@ const custom_selection = function(config) {
           let trial_data = {
             trial_name: 'issue',
             trial_number: CT + 1,
-            flag: issueFlag,
+            response: issueFlag,
           };
   
           // push data to csv
@@ -833,8 +833,6 @@ const rating_choice = function(config) {
   };
   return view;
 };
-
-// Custom function to build screen for understanding check
 
 // Custom function to build screen for single item social identification measure
 const single_item_social_identification = function(config) {

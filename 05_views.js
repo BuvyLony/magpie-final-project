@@ -1,6 +1,6 @@
 // In this file you can instantiate your views
 
-// Every experiment should start with an intro view. Here you can welcome your participants and tell them what the experiment is about
+// Intro view informing the participant about a fictious previous study 
 const intro = magpieViews.view_generator("intro", {
   trials: 1,
   name: 'intro',
@@ -19,29 +19,16 @@ const intro = magpieViews.view_generator("intro", {
 });
 
 
-// In the post test questionnaire you can ask your participants addtional questions
-const post_test_customized = magpieViews.view_generator("post_test", {
+// Pre questionnaire only containing age question, gender question and a textfield for further comments
+const pre_test_customized = magpieViews.view_generator("post_test", {
   trials: 1,
   name: 'post_test_customized',
   title: 'Additional information',
   text: 'Before we can start, we would like you to provide us with some additional information.',
 
-  // You can change much of what appears here, e.g., to present it in a different language, as follows:
-  // buttonText: 'Weiter',
-  // age_question: 'Alter',
-  // gender_question: 'Geschlecht',
-  // gender_male: 'männlich',
-  // gender_female: 'weiblich',
+  // Change gender selection
   gender_other: 'non-binary',
   gender_undefined: 'Prefer not to say',
-  // edu_question: 'Höchster Bildungsabschluss',
-  // edu_graduated_high_school: 'Abitur',
-  // edu_graduated_college: 'Hochschulabschluss',
-  // edu_higher_degree: 'Universitärer Abschluss',
-  // languages_question: 'Muttersprache',
-  // languages_more: '(in der Regel die Sprache, die Sie als Kind zu Hause gesprochen haben)',
-  // comments_question: 'Weitere Kommentare'
-
 },
                                                         
 {
@@ -62,10 +49,6 @@ const post_test_customized = magpieViews.view_generator("post_test", {
                             <option value="${quest.gender.undefined}">${"Prefer not to say"}</option>
                         </select>
                     </p>
-                    <p class='magpie-view-text'>
-                        <label for="languages" name="languages">${quest.langs.title}:<br /><span>${quest.langs.text}</</span></label>
-                        <input type="text" id="languages"/>
-                    </p>
                     <p class="magpie-view-text">
                         <label for="comments">${quest.comments.title}</label>
                         <textarea name="comments" id="comments" rows="6" cols="40"></textarea>
@@ -83,8 +66,8 @@ const thanks = magpieViews.view_generator("thanks", {
   prolificConfirmText: 'Press the button'
 });
 
-// For most tasks, you need instructions views
-const instructions = magpieViews.view_generator("instructions", {
+// For most tasks, you need instructions views TODO: do we need this?
+/* const instructions = magpieViews.view_generator("instructions", {
   trials: 1,
   name: 'instructions',
   title: 'General Instructions',
@@ -93,16 +76,16 @@ const instructions = magpieViews.view_generator("instructions", {
             <br />
             Tell your participants what they are to do here.`,
   buttonText: 'next'
-});
+}); */
 
-// instantiation of customized view for issue selection
+// Instantiation of customized view for social issue selection
 const issue_selection = custom_selection({
   trials: 1,
   name: 'issue_selection',
   data: 'issues',
 }); 
 
-// instantiation of customized view for statement rating
+// Instantiation of customized view for statement rating
 const statement_rating = custom_slider_rating({
   trials: 1,
   name: 'statement_rating',
@@ -120,7 +103,12 @@ const rating_choice_view = rating_choice({
   name: "rating_choice_view",
 });
 
-//understanding_check_view
+// Instantiation of iterative dropdown choice view for understanding check
+const iterative_dropdown_choice = magpieViews.view_generator("dropdown_choice", {
+  trials: 4,
+  name: "iterative_dropdown_choice",
+  data: understanding_trials.questions,
+});
 
 // Instantiation of the single item social identification measure
 const identification_measure = single_item_social_identification({
