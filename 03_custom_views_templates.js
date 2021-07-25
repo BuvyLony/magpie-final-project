@@ -1,6 +1,4 @@
 // TODO: Build nice likert scales
-// Build understanding check 
-
 
 
 // custom function to build screen for issue selection
@@ -241,7 +239,8 @@ const custom_slider_rating = function(config) {
       </center>
       `);
 
-      /* Read out which social issue was previously chosen in order to display statement.*/
+      /* js code
+      Read out which social issue was previously chosen in order to display statement.*/
       if(issueFlag === "Gun control"){
         document.getElementById("p1").innerHTML = "Adults should have the right to carry a concealed handgun";
       } else if(issueFlag === "Feminism"){
@@ -265,7 +264,7 @@ const custom_slider_rating = function(config) {
       }
     
 
-      /* js code 
+      /* 
       Response handler for when rating is clicked on screen. For each button, the name of the trial, the statement and response are 
       saved to the trial_data, trial counter is incremented by 1 and the next view is toggled. */ 
       // button 1 - on click
@@ -488,8 +487,8 @@ const moral_dilemma = function(config) {
       </center>
 
       <center>
-      <p id="ingroup_norm" style="margin-top: 1cm;" >Test</p>
-      <p id="outgroup_norm" style="margin-top: 1cm;" >Test</p>
+      <p id="first_norm" style="margin-top: 1cm;" >Test</p>
+      <p id="second_norm" style="margin-top: 1cm;" > nope</p>
       </center>
 
       <center>
@@ -506,12 +505,38 @@ const moral_dilemma = function(config) {
       </center>
 
       `);
+      
+      /* js code */
 
-      /* Read out which social issue was previously chosen in order to display norm(s). */
-      if(issueFlag === "Gun control"){
-        document.getElementById("ingroup_norm").innerHTML = "Approximately 60% of participants who agreed with you about gun restrictions chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-        document.getElementById("outgroup_norm").innerHTML = "Approximately 85% of participants who did not agree with you about gun restrictions chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-      } else if(issueFlag === "Feminism"){
+      // Determine with randomization:
+      // Whether both norms are shown 
+      bothNorms = _.sample([0, 1]);
+      // In which order they are shown
+      normsOrder = _.sample([0, 1]);
+      // Which behavior is allocated to which group
+      if (_.sample([0, 1])) {
+        ingroupNorm = "Approximately 60% of participants who agreed with you about ".concat(issueFlag, " chose to do nothing and leave the robber alone.");
+        outgroupNorm = "Approximately 85% of participants who did not agree with you about ".concat(issueFlag, " chose to call the police and report the robber.");
+      } else {
+        ingroupNorm = "Approximately 60% of participants who agreed with you about ".concat(issueFlag, " chose to call the police and report the robber.");
+        outgroupNorm = "Approximately 85% of participants who did not agree with you about ".concat(issueFlag, " chose to do nothing and leave the robber alone.");
+      }
+
+      /* 
+      Read out which social issue was previously chosen in order to display norm(s). */
+      /* if(issueFlag === "Gun control"){ */
+        if (!bothNorms) {
+          document.getElementById("first_norm").innerHTML = ingroupNorm;         
+        }
+        if (bothNorms) {
+          if(normsOrder){
+            document.getElementById("second_norm").innerHTML = outgroupNorm;          
+          } else {
+            document.getElementById("first_norm").innerHTML = outgroupNorm;          
+            document.getElementById("second_norm").innerHTML = ingroupNorm;         
+          }
+        }
+      /*}  else if(issueFlag === "Feminism"){
         document.getElementById("ingroup_norm").innerHTML = "Approximately 60% of participants who agreed with you about feminism chose to (do nothing and leave the robber alone / call the polive and report the robber).";
         document.getElementById("outgroup_norm").innerHTML = "Approximately 85% of participants who did not agree with you about feminism chose to (do nothing and leave the robber alone / call the polive and report the robber).";
       } else if (issueFlag === "Joe Biden") {
@@ -537,11 +562,12 @@ const moral_dilemma = function(config) {
         document.getElementById("outgroup_norm").innerHTML = "Approximately 85% of participants who did not agree with you about taxing religious institutions chose to (do nothing and leave the robber alone / call the polive and report the robber).";
          } else {
         throw new ReferenceError("Variable issueFlag seems to have no or a faulty value.");
-      }
+      } */
 
-      /* js code 
-      Response handler for when rating is clicked on screen. For each button, the name of the trial, the statement and response are 
-      saved to the trial_data, trial counter is incremented by 1 and the next view is toggled. */ 
+      /* 
+      Response handler for when rating is clicked on screen. For each button, the name of the trial, the displayed norms and response are 
+      saved to the trial_data, trial counter is incremented by 1 and the next view is toggled. 
+      TODO: change trial data to first and second norm and also save ordering etc */ 
       // button 1 - on click
       (function clickHandler1() {
         const button1 = document.getElementById("buttonA");
@@ -709,7 +735,7 @@ const rating_choice = function(config) {
     
 
       /* js code 
-      Response handler for when rating is clicked on screen. For each button, the name of the trial, the statement and response are 
+      Response handler for when rating is clicked on screen. For each button, the name of the trial and response are 
       saved to the trial_data, trial counter is incremented by 1 and the next view is toggled.  */ 
       // button 1 - on click
       (function clickHandler1() {
@@ -842,6 +868,8 @@ const single_item_social_identification = function(config) {
     trials: config.trials,
 
     render: function(CT, magpie) {
+      /* html code
+      Displays a statement and a 7 point Likert scale ranging from "Fully disagree" to "Fully agree". */
       $("main").html(`<div class='magpie-view' style="float:center;">
       <center>
       <p id="statement" style="margin-top: 8cm;"> </p>
@@ -859,133 +887,138 @@ const single_item_social_identification = function(config) {
       </center>
       `);
 
-    trial_name = null;
-    if (CT === 0) {
-      document.getElementById("statement").innerHTML = "I identify with people who agree with me about ".concat(issueFlag);   
-      trial_name = "identification_ingroup";   
-    } else if (CT === 1) {
-      document.getElementById("statement").innerHTML = "I identify with people who do not agree with me about ".concat(issueFlag);
-      trial_name = "identification_outgroup";
-    }
+      /* js code
+      Changes the statement in each trial. */
+      trial_name = null;
+      if (CT === 0) {
+        document.getElementById("statement").innerHTML = "I identify with people who agree with me about ".concat(issueFlag);   
+        trial_name = "identification_ingroup";   
+      } else if (CT === 1) {
+        document.getElementById("statement").innerHTML = "I identify with people who do not agree with me about ".concat(issueFlag);
+        trial_name = "identification_outgroup";
+      }
+      
+      /* 
+      Response handler for when rating is clicked on screen. For each button, the name of the trial and response are 
+      saved to the trial_data, trial counter is incremented by 1 and the next view is toggled. */ 
+      // Button 1 - on click
+      (function clickHandler1() {
+        const button1 = document.getElementById("buttonl");
+        button1.addEventListener("click", event=> {
 
-   // Button 1 - on click
-   (function clickHandler1() {
-    const button1 = document.getElementById("buttonl");
-    button1.addEventListener("click", event=> {
+          let trial_data = {
+            trial_name: trial_name,
+            trial_number: CT + 1,
+            response: document.getElementById("buttonl").innerHTML,
+          };
 
-      let trial_data = {
-        trial_name: trial_name,
-        trial_number: CT + 1,
-        response: document.getElementById("buttonl").innerHTML,
-      };
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+        })();
 
-      // push data to csv
-      magpie.trial_data.push(trial_data);
-      magpie.findNextView();
-    });
-    })();
+          // Button 2 - on click
+      (function clickHandler2() {
+        const button2 = document.getElementById("buttonm");
+        button2.addEventListener("click", event=> {
 
-       // Button 2 - on click
-   (function clickHandler2() {
-    const button2 = document.getElementById("buttonm");
-    button2.addEventListener("click", event=> {
+          let trial_data = {
+            trial_name: trial_name,
+            trial_number: CT + 1,
+            response: document.getElementById("buttonm").innerHTML,
+          };
 
-      let trial_data = {
-        trial_name: trial_name,
-        trial_number: CT + 1,
-        response: document.getElementById("buttonm").innerHTML,
-      };
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+        })();
 
-      // push data to csv
-      magpie.trial_data.push(trial_data);
-      magpie.findNextView();
-    });
-    })();
+      // Button 3 - on click
+      (function clickHandler3() {
+        const button3 = document.getElementById("buttonn");
+        button3.addEventListener("click", event=> {
 
-   // Button 3 - on click
-   (function clickHandler3() {
-    const button3 = document.getElementById("buttonn");
-    button3.addEventListener("click", event=> {
+          let trial_data = {
+            trial_name: trial_name,
+            trial_number: CT + 1,
+            response: document.getElementById("buttonn").innerHTML,
+          };
 
-      let trial_data = {
-        trial_name: trial_name,
-        trial_number: CT + 1,
-        response: document.getElementById("buttonn").innerHTML,
-      };
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+        })();
 
-      // push data to csv
-      magpie.trial_data.push(trial_data);
-      magpie.findNextView();
-    });
-    })();
+      // Button 4 - on click
+      (function clickHandler4() {
+        const button4 = document.getElementById("buttono");
+        button4.addEventListener("click", event=> {
 
-   // Button 4 - on click
-   (function clickHandler4() {
-    const button4 = document.getElementById("buttono");
-    button4.addEventListener("click", event=> {
+          let trial_data = {
+            trial_name: trial_name,
+            trial_number: CT + 1,
+            response: document.getElementById("buttono").innerHTML,
+          };
 
-      let trial_data = {
-        trial_name: trial_name,
-        trial_number: CT + 1,
-        response: document.getElementById("buttono").innerHTML,
-      };
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+        })();
 
-      // push data to csv
-      magpie.trial_data.push(trial_data);
-      magpie.findNextView();
-    });
-    })();
+      // Button 5 - on click
+      (function clickHandler5() {
+        const button5 = document.getElementById("buttonp");
+        button5.addEventListener("click", event=> {
 
-   // Button 5 - on click
-   (function clickHandler5() {
-    const button5 = document.getElementById("buttonp");
-    button5.addEventListener("click", event=> {
+          let trial_data = {
+            trial_name: trial_name,
+            trial_number: CT + 1,
+            response: document.getElementById("buttonp").innerHTML,
+          };
 
-      let trial_data = {
-        trial_name: trial_name,
-        trial_number: CT + 1,
-        response: document.getElementById("buttonp").innerHTML,
-      };
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+        })();
 
-      // push data to csv
-      magpie.trial_data.push(trial_data);
-      magpie.findNextView();
-    });
-    })();
+      // Button 6 - on click
+      (function clickHandler6() {
+        const button6 = document.getElementById("buttonq");
+        button6.addEventListener("click", event=> {
 
-   // Button 6 - on click
-   (function clickHandler6() {
-    const button6 = document.getElementById("buttonq");
-    button6.addEventListener("click", event=> {
+          let trial_data = {
+            trial_name: trial_name,
+            trial_number: CT + 1,
+            response: document.getElementById("buttonq").innerHTML,
+          };
 
-      let trial_data = {
-        trial_name: trial_name,
-        trial_number: CT + 1,
-        response: document.getElementById("buttonq").innerHTML,
-      };
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+        })();
 
-      // push data to csv
-      magpie.trial_data.push(trial_data);
-      magpie.findNextView();
-    });
-    })();
+        // Button 7 - on click
+      (function clickHandler7() {
+        const button7 = document.getElementById("buttonv");
+        button7.addEventListener("click", event=> {
 
-    // Button 7 - on click
-   (function clickHandler7() {
-    const button7 = document.getElementById("buttonv");
-    button7.addEventListener("click", event=> {
+          let trial_data = {
+            trial_name: trial_name,
+            trial_number: CT + 1,
+            response: document.getElementById("buttonv").innerHTML,
+          };
 
-      let trial_data = {
-        trial_name: trial_name,
-        trial_number: CT + 1,
-        response: document.getElementById("buttonv").innerHTML,
-      };
-
-      // push data to csv
-      magpie.trial_data.push(trial_data);
-      magpie.findNextView();
-    });
-    })();
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+      })();
     }
   };
   return view;

@@ -10,7 +10,6 @@ const intro = magpieViews.view_generator("intro", {
             <br />
             In the previous paper, a moral dilemma was described that involved two possible courses of actions. 
             Participants chose which action they preferred and had to rate how they would feel about performing that action.
-            You are in the <strong>${coin}</strong> group.
             <br />
             <br />
             In this study, you will be presented with a scenario describing a moral dilemma. 

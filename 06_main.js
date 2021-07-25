@@ -14,8 +14,6 @@ $("document").ready(function() {
     // in all other modes null will be returned
     window.magpie_monitor = magpieInit({
         // You have to specify all views you want to use in this experiment and the order of them#
-
-        // replaced issue selection with custom_issue selection view, to be able to set flag-variable
         views_seq: [
             intro,
             pre_test_customized,
