@@ -103,9 +103,9 @@ const rating_choice_view = rating_choice({
 });
 
 // Instantiation of iterative dropdown choice view for understanding check
-const iterative_dropdown_choice = magpieViews.view_generator("dropdown_choice", {
+const understanding_check = magpieViews.view_generator("dropdown_choice", {
   trials: 4,
-  name: "iterative_dropdown_choice",
+  name: "understanding_check",
   data: understanding_trials.questions,
 });
 

@@ -511,10 +511,10 @@ const moral_dilemma = function(config) {
       // Determine with randomization:
       // Whether both norms are shown 
       bothNorms = _.sample([0, 1]);
-      // In which order they are shown
+      // In which order they are shown 
       normsOrder = _.sample([0, 1]);
       // Which behavior is allocated to which group
-      if (_.sample([0, 1])) {
+      if (_.sample([0, 1]) === 1) {
         ingroupNorm = "Approximately 60% of participants who agreed with you about ".concat(issueFlag, " chose to do nothing and leave the robber alone.");
         outgroupNorm = "Approximately 85% of participants who did not agree with you about ".concat(issueFlag, " chose to call the police and report the robber.");
       } else {
@@ -524,50 +524,23 @@ const moral_dilemma = function(config) {
 
       /* 
       Read out which social issue was previously chosen in order to display norm(s). */
-      /* if(issueFlag === "Gun control"){ */
-        if (!bothNorms) {
-          document.getElementById("first_norm").innerHTML = ingroupNorm;         
+      if (bothNorms === 0) {
+        document.getElementById("first_norm").innerHTML = ingroupNorm;  
+        document.getElementById("second_norm").innerHTML = " ";       
+      }
+      if (bothNorms === 1) {
+        if(normsOrder === 1){
+          document.getElementById("first_norm").innerHTML = ingroupNorm;    
+          document.getElementById("second_norm").innerHTML = outgroupNorm;          
+        } else {
+          document.getElementById("first_norm").innerHTML = outgroupNorm;          
+          document.getElementById("second_norm").innerHTML = ingroupNorm;         
         }
-        if (bothNorms) {
-          if(normsOrder){
-            document.getElementById("second_norm").innerHTML = outgroupNorm;          
-          } else {
-            document.getElementById("first_norm").innerHTML = outgroupNorm;          
-            document.getElementById("second_norm").innerHTML = ingroupNorm;         
-          }
-        }
-      /*}  else if(issueFlag === "Feminism"){
-        document.getElementById("ingroup_norm").innerHTML = "Approximately 60% of participants who agreed with you about feminism chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-        document.getElementById("outgroup_norm").innerHTML = "Approximately 85% of participants who did not agree with you about feminism chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-      } else if (issueFlag === "Joe Biden") {
-        document.getElementById("ingroup_norm").innerHTML = "Approximately 60% of participants who agreed with you about Joe Biden chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-        document.getElementById("outgroup_norm").innerHTML = "Approximately 85% of participants who did not agree with you about Joe Biden chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-      } else if(issueFlag === "Immigration and Dreamers"){
-        document.getElementById("ingroup_norm").innerHTML = "Approximately 60% of participants who agreed with you about immigration and dreamers chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-        document.getElementById("outgroup_norm").innerHTML = "Approximately 85% of participants who did not agree with you about immigration and dreamers chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-      } else if(issueFlag === "Transgender rights"){
-        document.getElementById("ingroup_norm").innerHTML = "Approximately 60% of participants who agreed with you about transgender rights chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-        document.getElementById("outgroup_norm").innerHTML = "Approximately 85% of participants who did not agree with you about transgender rights chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-      } else if (issueFlag === "Drug legalization") {
-        document.getElementById("ingroup_norm").innerHTML = "Approximately 60% of participants who agreed with you about drug legalization chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-        document.getElementById("outgroup_norm").innerHTML = "Approximately 85% of participants who did not agree with you about drug legalization chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-      } else if (issueFlag === "Colin Kaepernick kneeling during the national anthem") {
-        document.getElementById("ingroup_norm").innerHTML = "Approximately 60% of participants who agreed with you about Colin Kaepernick kneeling during the national anthem chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-        document.getElementById("outgroup_norm").innerHTML = "Approximately 85% of participants who did not agree with you about Colin Kaepernick kneeling during the national anthem chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-      } else if (issueFlag === "Buying and wearing fur") {
-        document.getElementById("ingroup_norm").innerHTML = "Approximately 60% of participants who agreed with you about buying and wearing fur chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-        document.getElementById("outgroup_norm").innerHTML = "Approximately 85% of participants who did not agree with you about buying and wearing fur chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-      } else if (issueFlag === "Taxing religious organizations") {
-        document.getElementById("ingroup_norm").innerHTML = "Approximately 60% of participants who agreed with you about taxing religious institutions chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-        document.getElementById("outgroup_norm").innerHTML = "Approximately 85% of participants who did not agree with you about taxing religious institutions chose to (do nothing and leave the robber alone / call the polive and report the robber).";
-         } else {
-        throw new ReferenceError("Variable issueFlag seems to have no or a faulty value.");
-      } */
+      }
 
       /* 
-      Response handler for when rating is clicked on screen. For each button, the name of the trial, the displayed norms and response are 
-      saved to the trial_data, trial counter is incremented by 1 and the next view is toggled. 
-      TODO: change trial data to first and second norm and also save ordering etc */ 
+      Response handler for when rating is clicked on screen. For each button, the name of the trial, the displayed norms, whether both norms were shown, 
+      the order of the shown norms and the response are saved to the trial_data, trial counter is incremented by 1 and the next view is toggled.  */ 
       // button 1 - on click
       (function clickHandler1() {
         const button1 = document.getElementById("buttonA");
@@ -577,8 +550,11 @@ const moral_dilemma = function(config) {
           let trial_data = {
             trial_name: "moral dilemma",
             trial_number: CT + 1,
-            ingroup_norm: document.getElementById("ingroup_norm").innerHTML,
-            outgroup_norm: document.getElementById("outgroup_norm").innerHTML,
+            ingroup_norm: ingroupNorm,
+            outgroup_norm: outgroupNorm,
+            both_norms_shown: bothNorms,
+            norm_first_shown: document.getElementById("first_norm").innerHTML,
+            norm_second_shown: document.getElementById("second_norm").innerHTML,
             response: document.getElementById("buttonA").innerHTML,
           };
 
@@ -597,8 +573,11 @@ const moral_dilemma = function(config) {
           let trial_data = {
             trial_name: "moral dilemma",
             trial_number: CT + 1,
-            ingroup_norm: document.getElementById("ingroup_norm").innerHTML,
-            outgroup_norm: document.getElementById("outgroup_norm").innerHTML,
+            ingroup_norm: ingroupNorm,
+            outgroup_norm: outgroupNorm,
+            both_norms_shown: bothNorms,
+            norm_first_shown: document.getElementById("first_norm").innerHTML,
+            norm_second_shown: document.getElementById("second_norm").innerHTML,
             response: document.getElementById("buttonB").innerHTML,
           };
 
@@ -617,8 +596,11 @@ const moral_dilemma = function(config) {
           let trial_data = {
             trial_name: "moral dilemma",
             trial_number: CT + 1,
-            ingroup_norm: document.getElementById("ingroup_norm").innerHTML,
-            outgroup_norm: document.getElementById("outgroup_norm").innerHTML,
+            ingroup_norm: ingroupNorm,
+            outgroup_norm: outgroupNorm,
+            both_norms_shown: bothNorms,
+            norm_first_shown: document.getElementById("first_norm").innerHTML,
+            norm_second_shown: document.getElementById("second_norm").innerHTML,
             response: document.getElementById("buttonC").innerHTML,
           };
 
@@ -637,8 +619,11 @@ const moral_dilemma = function(config) {
           let trial_data = {
             trial_name: "moral dilemma",
             trial_number: CT + 1,
-            ingroup_norm: document.getElementById("ingroup_norm").innerHTML,
-            outgroup_norm: document.getElementById("outgroup_norm").innerHTML,
+            ingroup_norm: ingroupNorm,
+            outgroup_norm: outgroupNorm,
+            both_norms_shown: bothNorms,
+            norm_first_shown: document.getElementById("first_norm").innerHTML,
+            norm_second_shown: document.getElementById("second_norm").innerHTML,
             response: document.getElementById("buttonD").innerHTML,
           };
 
@@ -657,8 +642,11 @@ const moral_dilemma = function(config) {
           let trial_data = {
             trial_name: "moral dilemma",
             trial_number: CT + 1,
-            ingroup_norm: document.getElementById("ingroup_norm").innerHTML,
-            outgroup_norm: document.getElementById("outgroup_norm").innerHTML,
+            ingroup_norm: ingroupNorm,
+            outgroup_norm: outgroupNorm,
+            both_norms_shown: bothNorms,
+            norm_first_shown: document.getElementById("first_norm").innerHTML,
+            norm_second_shown: document.getElementById("second_norm").innerHTML,
             response: document.getElementById("buttonE").innerHTML,
           };
 
@@ -677,8 +665,11 @@ const moral_dilemma = function(config) {
           let trial_data = {
             trial_name: "moral dilemma",
             trial_number: CT + 1,
-            ingroup_norm: document.getElementById("ingroup_norm").innerHTML,
-            outgroup_norm: document.getElementById("outgroup_norm").innerHTML,
+            ingroup_norm: ingroupNorm,
+            outgroup_norm: outgroupNorm,
+            both_norms_shown: bothNorms,
+            norm_first_shown: document.getElementById("first_norm").innerHTML,
+            norm_second_shown: document.getElementById("second_norm").innerHTML,
             response: document.getElementById("buttonF").innerHTML,
           };
 

@@ -21,7 +21,7 @@ $("document").ready(function() {
             statement_rating,
             moral_dilemma_view,
             rating_choice_view,
-            iterative_dropdown_choice,
+            understanding_check,
             identification_measure,
             thanks,
         ],
