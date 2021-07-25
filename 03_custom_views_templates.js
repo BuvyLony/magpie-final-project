@@ -1,5 +1,3 @@
-// TODO: Build nice likert scales
-
 
 // custom function to build screen for issue selection
 const custom_selection = function(config) {
@@ -12,6 +10,8 @@ const custom_selection = function(config) {
         Builds 9 buttons which each represent a social issue to choose. */
         $("main").html(`<div class='magpie-view'>
         <center>
+        <h2 id="question" style="margin-top: 1cm;">Social Issues</h2>
+
         <p id="p1" style="margin-top: 1cm;">Which of these issues do you care about the most?</p>
         </center>
         <center>
@@ -220,7 +220,8 @@ const custom_slider_rating = function(config) {
       In the title, a statement is displayed, which depends on the previously chosen social issue. */
       $("main").html(`<div class='magpie-view' style="float:center;">
       <center>
-      <p id="p1" style="margin-top: 8cm;">Hello!</p>
+      <h2 id="question" style="margin-top: 1cm;">How much do you agree with this statement?</h2>
+      <p id="p1" style="margin-top: 2cm;">Hello!</p>
       </center>
       <center>
       <p style="display:inline-block;">Strongly disagree</p>
@@ -237,8 +238,20 @@ const custom_slider_rating = function(config) {
       <div style="padding: 20px; width: 4px; display: inline-block;"> <button id="button11">5</button> </div>
       <p style="display:inline-block">Strongly agree</p>
       </center>
-      `);
+      `); 
 
+      /* $("main").html(`<div class='magpie-view' style="float:center;">
+      <table id="likert">
+      <tr>
+         <td><label>Strongly disagree<input id="button1" type="radio" name="strongly_agree" value="1" /></label></td>
+         <td><label>Moderately agree<input type="radio" name="Guilty" value="2" /></label></td>
+         <td><label><input type="radio" name="Guilty" value="3" /></label></td>
+         <td><label><input type="radio" name="Guilty" value="4" /></label></td>
+         <td><label><input id="radGuiltyEnd" type="radio" name="Guilty" value="5" />Very Guilty</label></td>
+      </tr>
+
+     `);
+ */
       /* js code
       Read out which social issue was previously chosen in order to display statement.*/
       if(issueFlag === "Gun control"){
@@ -481,6 +494,8 @@ const moral_dilemma = function(config) {
       TODO: randomization*/
       $("main").html(`<div class='magpie-view' style="float:center;">
       <center>
+      <h2 id="question" style="margin-top: 1cm;">Moral Dilemma</h2>
+
       <p id="header" style="margin-top: 1cm;" >Imagine you have witnessed a man rob a bank. However, you then saw him do something unexpected with the money. 
       He donated it all to a run-down orphanage that would benefit greatly from the money. 
       You must decide whether to call the police and report the robber or do nothing and leave the robber alone.</p>
@@ -683,7 +698,7 @@ const moral_dilemma = function(config) {
   return view;
 };
 
-// Custom function to build screen for moral dilemma
+// Custom function to build screen to rate how the choice of behavior would make participant feel
 const rating_choice = function(config) {
   const view = { 
     name: config.name,
@@ -694,6 +709,7 @@ const rating_choice = function(config) {
       Displays the chosen behavior and a 7 point likert scale asking to rate how this made them feel. */
        $("main").html(`<div class='magpie-view'">
       <center>
+      <h2 id="question" style="margin-top: 1cm;">Behavior choice</h2>
       <p id="chosen_behavior" style="margin-top: 1cm;" >Test</p>
 
       <center>
@@ -863,7 +879,8 @@ const single_item_social_identification = function(config) {
       Displays a statement and a 7 point Likert scale ranging from "Fully disagree" to "Fully agree". */
       $("main").html(`<div class='magpie-view' style="float:center;">
       <center>
-      <p id="statement" style="margin-top: 8cm;"> </p>
+      <h2 id="question" style="margin-top: 1cm;">How much do you agree with this statement?</h2>
+      <p id="statement" style="margin-top: 1cm;"> </p>
       </center>
       <center>
       <p style="display:inline-block;">Fully disagree</p>
@@ -878,17 +895,50 @@ const single_item_social_identification = function(config) {
       </center>
       `);
 
-      /* js code
-      Changes the statement in each trial. */
+      /* js code */
+
+      // Determine which groups we need
+      if(issueFlag === "Gun control"){
+        pro_name = "pro-gun enthusiasts.";
+        anti_name = "anti-gun advocates";
+      } else if(issueFlag === "Feminism"){
+        pro_name = "pro-feminism enthusiasts.";
+        anti_name = "anti-feminism advocates";      
+      } else if (issueFlag === "Joe Biden") {
+        pro_name = "pro-Biden enthusiasts.";
+        anti_name = "anti-Biden advocates";
+      } else if(issueFlag === "Immigration and Dreamers"){
+        pro_name = "pro-dreamers enthusiasts.";
+        anti_name = "anti-dreamers advocates";
+      } else if(issueFlag === "Transgender rights"){
+        pro_name = "pro-trans rights enthusiasts.";
+        anti_name = "anti-trans rights advocates";
+      } else if (issueFlag === "Drug legalization") {
+        pro_name = "pro-drug legalization enthusiasts.";
+        anti_name = "anti-drug legalization advocates";
+      } else if (issueFlag === "Colin Kaepernick kneeling during the national anthem") {
+        pro_name = "pro Colin Kaepernick enthusiasts.";
+        anti_name = "anti Colin Kaepernick advocates";
+      } else if (issueFlag === "Buying and wearing fur") {
+        pro_name = "pro-fur enthusiasts.";
+        anti_name = "anti-fur advocates";
+      } else if (issueFlag === "Taxing religious organizations") {
+        pro_name = "pro-taxing of religious organizations enthusiasts.";
+        anti_name = "anti-taxing of religious organizations advocates";
+      } else {
+        throw new ReferenceError("Variable issueFlag seems to have no or a faulty value.");
+      };
+
+      // Change the statement in each trial
       trial_name = null;
       if (CT === 0) {
-        document.getElementById("statement").innerHTML = "I identify with people who agree with me about ".concat(issueFlag);   
-        trial_name = "identification_ingroup";   
+        document.getElementById("statement").innerHTML = "I identify with  ".concat(pro_name);   
+        trial_name = "identification_pro";   
       } else if (CT === 1) {
-        document.getElementById("statement").innerHTML = "I identify with people who do not agree with me about ".concat(issueFlag);
-        trial_name = "identification_outgroup";
+        document.getElementById("statement").innerHTML = "I identify with  ".concat(anti_name);
+        trial_name = "identification_anti";
       }
-      
+
       /* 
       Response handler for when rating is clicked on screen. For each button, the name of the trial and response are 
       saved to the trial_data, trial counter is incremented by 1 and the next view is toggled. */ 

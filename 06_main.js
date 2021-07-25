@@ -19,6 +19,7 @@ $("document").ready(function() {
             pre_test_customized,
             issue_selection,
             statement_rating,
+            instructions,
             moral_dilemma_view,
             rating_choice_view,
             understanding_check,

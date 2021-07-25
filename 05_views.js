@@ -5,15 +5,12 @@ const intro = magpieViews.view_generator("intro", {
   trials: 1,
   name: 'intro',
   // If you use JavaScripts Template String `I am a Template String`, you can use HTML <></> and javascript ${} inside
-  text: `We are following up on a previously published paper that looked at how people feel about moral dilemmas.
-            <br />
-            <br />
-            In the previous paper, a moral dilemma was described that involved two possible courses of actions. 
-            Participants chose which action they preferred and had to rate how they would feel about performing that action.
-            <br />
-            <br />
-            In this study, you will be presented with a scenario describing a moral dilemma. 
-            You will choose which action you would take and then provide a rating of how good or bad you imagine you would feel after taking that action`,
+  text: `Thanks a lot for taking part in this experiment. 
+  <br />
+  It will take about 5 minutes and all saved data will be anonymous.
+  <br />
+  <br />
+  Before we can begin, we will ask you a few basic questions. `, 
   buttonText: 'Begin the experiment'
 });
 
@@ -66,16 +63,21 @@ const thanks = magpieViews.view_generator("thanks", {
 });
 
 // For most tasks, you need instructions views TODO: do we need this?
-/* const instructions = magpieViews.view_generator("instructions", {
+ const instructions = magpieViews.view_generator("instructions", {
   trials: 1,
   name: 'instructions',
   title: 'General Instructions',
-  text: `This is a sample instructions view.
-            <br />
-            <br />
-            Tell your participants what they are to do here.`,
+  text: `We are following up on a previously published paper that looked at how people feel about moral dilemmas.
+  <br />
+  <br />
+  In the previous paper, a moral dilemma was described that involved two possible courses of actions. 
+  Participants chose which action they preferred and had to rate how they would feel about performing that action.
+  <br />
+  <br />
+  In this study, you will be presented with a scenario describing a moral dilemma. 
+  You will choose which action you would take and then provide a rating of how good or bad you imagine you would feel after taking that action.`,
   buttonText: 'next'
-}); */
+}); 
 
 // Instantiation of customized view for social issue selection
 const issue_selection = custom_selection({
@@ -88,7 +90,7 @@ const issue_selection = custom_selection({
 const statement_rating = custom_slider_rating({
   trials: 1,
   name: 'statement_rating',
-})
+});
 
 // Instantiation of the moral dilemma view
 const moral_dilemma_view = moral_dilemma({
@@ -104,7 +106,7 @@ const rating_choice_view = rating_choice({
 
 // Instantiation of iterative dropdown choice view for understanding check
 const understanding_check = magpieViews.view_generator("dropdown_choice", {
-  trials: 4,
+  trials: understanding_trials.questions.length,
   name: "understanding_check",
   data: understanding_trials.questions,
 });
