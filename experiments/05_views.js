@@ -7,7 +7,8 @@ const intro = magpieViews.view_generator("intro", {
   // If you use JavaScripts Template String `I am a Template String`, you can use HTML <></> and javascript ${} inside
   text: `Thanks a lot for taking part in this experiment. 
   <br />
-  It will take about 5 minutes and all saved data will be anonymous.
+  It will take about 5 minutes and all saved data will be anonymous. You can stop at any given time and no data will be saved 
+  if you close your browser window during the experiment. Should there be any issues or comments, write an e-mail to mbensien@uos.de.
   <br />
   <br />
   Before we can begin, we will ask you a few basic questions. `, 

@@ -542,8 +542,7 @@ const moral_dilemma = function(config) {
       if (bothNorms === 0) {
         document.getElementById("first_norm").innerHTML = ingroupNorm;  
         document.getElementById("second_norm").innerHTML = " ";       
-      }
-      if (bothNorms === 1) {
+      } else if (bothNorms === 1) {
         if(normsOrder === 1){
           document.getElementById("first_norm").innerHTML = ingroupNorm;    
           document.getElementById("second_norm").innerHTML = outgroupNorm;          
