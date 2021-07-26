@@ -288,7 +288,6 @@ const custom_slider_rating = function(config) {
           let trial_data = {
             trial_name: "statement rating",
             trial_number: CT + 1,
-            statement: document.getElementById("p1").innerHTML,
             response: "-5",
           };
 
@@ -306,7 +305,6 @@ const custom_slider_rating = function(config) {
           let trial_data = {
             trial_name: "statement rating",
             trial_number: CT + 1,
-            statement: document.getElementById("p1").innerHTML,
             response: "-4",
           };
 
@@ -324,7 +322,6 @@ const custom_slider_rating = function(config) {
           let trial_data = {
             trial_name: "statement rating",
             trial_number: CT + 1,
-            statement: document.getElementById("p1").innerHTML,
             response: "-3",
           };
 
@@ -342,7 +339,6 @@ const custom_slider_rating = function(config) {
           let trial_data = {
             trial_name: "statement rating",
             trial_number: CT + 1,
-            statement: document.getElementById("p1").innerHTML,
             response: "-2",
           };
 
@@ -360,7 +356,6 @@ const custom_slider_rating = function(config) {
           let trial_data = {
             trial_name: "statement rating",
             trial_number: CT + 1,
-            statement: document.getElementById("p1").innerHTML,
             response: "-1",
           };
 
@@ -377,7 +372,6 @@ const custom_slider_rating = function(config) {
           let trial_data = {
             trial_name: "statement rating",
             trial_number: CT + 1,
-            statement: document.getElementById("p1").innerHTML,
             response: "0",
           };
 
@@ -395,7 +389,6 @@ const custom_slider_rating = function(config) {
           let trial_data = {
             trial_name: "statement rating",
             trial_number: CT + 1,
-            statement: document.getElementById("p1").innerHTML,
             response: "1",
           };
 
@@ -413,7 +406,6 @@ const custom_slider_rating = function(config) {
           let trial_data = {
             trial_name: "statement rating",
             trial_number: CT + 1,
-            statement: document.getElementById("p1").innerHTML,
             response: "2",
           };
 
@@ -431,7 +423,6 @@ const custom_slider_rating = function(config) {
           let trial_data = {
             trial_name: "statement rating",
             trial_number: CT + 1,
-            statement: document.getElementById("p1").innerHTML,
             response: "3",
           };
 
@@ -449,7 +440,6 @@ const custom_slider_rating = function(config) {
           let trial_data = {
             trial_name: "statement rating",
             trial_number: CT + 1,
-            statement: document.getElementById("p1").innerHTML,
             response: "4",
           };
 
@@ -467,7 +457,6 @@ const custom_slider_rating = function(config) {
           let trial_data = {
             trial_name: "statement rating",
             trial_number: CT + 1,
-            statement: document.getElementById("p1").innerHTML,
             response: "5",
           };
 
