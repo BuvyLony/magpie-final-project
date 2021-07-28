@@ -479,8 +479,7 @@ const moral_dilemma = function(config) {
     render: function(CT, magpie) {
       /* html code
       Displays the moral dilemma and either both ingroup and outgroup norm or only ingroup norm. If both, the order is randomized. Whether ingroup or outgroup
-      chose a certain behavior is also randomized.
-      TODO: randomization*/
+      chose a certain behavior is also randomized.*/
       $("main").html(`<div class='magpie-view' style="float:center;">
       <center>
       <h2 id="question" style="margin-top: 1cm;">Moral Dilemma</h2>

@@ -1,5 +1,3 @@
-// In this file you can instantiate your views
-
 // Intro view informing the participant about a fictious previous study 
 const intro = magpieViews.view_generator("intro", {
   trials: 1,
@@ -63,7 +61,7 @@ const thanks = magpieViews.view_generator("thanks", {
   prolificConfirmText: 'Press the button'
 });
 
-// For most tasks, you need instructions views TODO: do we need this?
+// Instantion of instruction view
  const instructions = magpieViews.view_generator("instructions", {
   trials: 1,
   name: 'instructions',
@@ -104,6 +102,21 @@ const rating_choice_view = rating_choice({
   trials: 1,
   name: "rating_choice_view",
 });
+
+// Instantiation of the instruction view before understanding check
+const understanding_check_instructions = magpieViews.view_generator("instructions", {
+  trials: 1,
+  name: 'understanding_check_instructions',
+  title: 'Instructions',
+  text: `You have reached the last part of the experiment!   <br />
+  As we mentioned in the beginning, we are following up on a previously published paper that looked at how people feel about moral dilemmas.
+  On the next pages, you will be presented some statements about this previous study and your task is to choose whether you think
+  these are correct or incorrect. 
+  <br />
+  <br />
+  Afterwards, we will ask you two more questions and on a last page, you can submit your data and end the experiment.`,
+  buttonText: 'next'
+}); 
 
 // Instantiation of iterative dropdown choice view for understanding check
 const understanding_check = magpieViews.view_generator("dropdown_choice", {
