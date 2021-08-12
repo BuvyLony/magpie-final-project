@@ -8,7 +8,13 @@ output: html_document
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(dplyr)
-install
+library(ordinal)
+library(rstan)
+library(bridgesampling)
+library(shinystan)
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+set.seed(123)
 
 ```
 
