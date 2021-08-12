@@ -118,6 +118,11 @@ const understanding_check_instructions = magpieViews.view_generator("instruction
   buttonText: 'next'
 }); 
 
+const custom_understanding_check = four_question_forced_choice({
+  trials: 1,
+  name: "custom_understanding_check",
+});
+
 // Instantiation of iterative dropdown choice view for understanding check
 const understanding_check = magpieViews.view_generator("dropdown_choice", {
   trials: understanding_trials.questions.length,
