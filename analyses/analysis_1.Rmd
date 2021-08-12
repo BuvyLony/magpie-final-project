@@ -54,6 +54,26 @@ analyse_data <- pivot_wider(analyse_data,
 analyse_data <- analyse_data %>% 
   group_by(submission_id) %>%
     summarise_each(funs(toString(na.omit(.))))
+    
+#change response to moral dilemma
+#def call the police = 1
+# def not call the police = 6
+for(i in 1:nrow(analyse_data)){
+  if(analyse_data[i,"moral dilemma"] == "Definitely call the police and report the robber"){
+  analyse_data[i,"moral dilemma"]<- 1
+  } else if (analyse_data[i,"moral dilemma"] == "Very likely call the police and report the robber"){
+  analyse_data[i,"moral dilemma"]<- 2
+  } else if (analyse_data[i,"moral dilemma"] == "Probably call the police and report the robber"){
+  analyse_data[i,"moral dilemma"]<- 3
+  } else if (analyse_data[i,"moral dilemma"] == "Probably do nothing and the leave the robber alone"){
+    analyse_data[i,"moral dilemma"]<- 4
+  } else if (analyse_data[i,"moral dilemma"] == "Very likely do nothing and the leave the robber alone"){
+    analyse_data[i,"moral dilemma"]<- 5
+  } else if (analyse_data[i,"moral dilemma"] == "Definitely do nothing and leave the robber alone"){
+    analyse_data[i,"moral dilemma"]<- 6
+  }
+
+}
 
 
 
