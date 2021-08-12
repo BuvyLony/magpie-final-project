@@ -81,15 +81,17 @@ for(i in 1:nrow(analyse_data)){
 # Analysis
 ```{r}
 #Frequentist Analysis----------------
-ordinal_1 <- clm(as.factor(response)~ingroup_norm*both_norms_shown, data=useable_data)
+length(analyse_data$ingroup_norm_new)
+length(analyse_data$both_norms_shown)
+ordinal_1 <- clm(as.factor(analyse_data$'moral dilemma')~ingroup_norm_new*both_norms_shown, data=analyse_data)
 
 source("functions/produce_mean_and_count_bar_plot.R")
-plot_1 <- produce_mean_and_count_bar_plot(useable_data, bar_width_means=0.5, bar_width_response=0.3)
+plot_1 <- produce_mean_and_count_bar_plot(analyse_data, bar_width_means=0.5, bar_width_response=0.3)
 ggsave(file="plot_1.png", plot=plot_1, width=190, height = 110, units="mm")  
 
 #Bayesian analysis------------
 #Prepare data for stan.
-useable_data <- useable_data %>%
+analyse_data <- analyse_data %>%
   select(expNum, response, ingroupNorm, bothShown, ingroupAgree, outgroupDisagree) %>% #select relevant columns
   mutate(ingroupAgree = ifelse(is.na(ingroupAgree), 1, ingroupAgree), #For the experiment we assumed that participants identified with the ingroup and not with the outgroup.
          outgroupDisagree = ifelse(is.na(outgroupDisagree), 1, outgroupDisagree)
