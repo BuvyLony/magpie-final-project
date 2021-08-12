@@ -854,6 +854,80 @@ const rating_choice = function(config) {
   return view;
 };
 
+// Custom function to build screen for understanding check
+const four_question_forced_choice = function(config) {
+  const view = { 
+    name: config.name,
+    CT:0,
+    trials: config.trials,
+    render: function(CT, magpie) {
+      /* html code
+      Builds a title and 4 statements with a choice between 'true' or 'false' button for each. 
+      Additionally, a button at the bottom of the page leads to the next page. */
+      $("main").html(`<div class='magpie-view' style="float:center;">
+      <center>
+      <h2 id="question" style="margin-top: 1cm;">Is this true about the previous study described in the introdution?</h2>
+      </center>
+      <form>
+        <center>
+        <p id="claim1" style="margin-top: 2cm;">Participants chose which action they prefered.</p>      
+        <input type="radio" id="true1" name="question1" value="true"> <label for="true1">true</label>
+        <input type="radio" id="false1" name="question1" value="false"> <label for="false1">false</label>
+
+        <p id="claim2" style="margin-top: 1cm;">Due to a computer error, participants were not allocated equally to imagine performing the different actions.</p>
+        <input type="radio" id="true2" name="question2" value="true"> <label for="true2">true</label>
+        <input type="radio" id="false2" name="question2" value="false"> <label for="false2">false</label>
+        
+        <p id="claim3" style="margin-top: 1cm;">No data was saved during the experiment.</p>
+        <input type="radio" id="true3" name="question3" value="true"> <label for="true3">true</label>
+        <input type="radio" id="false3" name="question3" value="false"> <label for="false3">false</label>
+        
+        <p id="claim4" style="margin-top: 1cm;">The participants completed the experiment with their eyes closed.</p>
+        <input type="radio" id="true4" name="question4" value="true"> <label for="true4">true</label>
+        <input type="radio" id="false4" name="question4" value="false"> <label for="false4">false</label>
+        </center>
+
+        <center>
+        <button type="submit" id="Next" style="margin-top: 2cm;" >Next</button>
+        </center>
+      </form>
+      `);     
+
+      /* 
+      Response handler for when 'Next' button is clicked on screen. The responses for each of the 4 statements is read 
+      from the html data and saved in the magpie object. */ 
+      (function clickHandlerNext() {
+        const buttonNext = document.getElementById("Next");
+        var form = document.querySelector("form");
+
+        buttonNext.addEventListener("click", event=> {
+          var data = new FormData(form);
+          const responses = []; 
+
+          for (const entry of data) {
+              responses.push(entry[1])
+          };          
+          event.preventDefault();
+
+          let trial_data = {
+            trial_name: "custom understanding check",
+            trial_number: CT + 1,
+            response_claim1: responses[0],
+            response_claim2: responses[1],
+            response_claim3: responses[2],
+            response_claim4: responses[3],
+          };
+
+          // push data to csv
+          magpie.trial_data.push(trial_data);
+          magpie.findNextView();
+        });
+      })(); 
+    }
+  };
+  return view;
+};
+
 // Custom function to build screen for single item social identification measure
 const single_item_social_identification = function(config) {
   const view = { 
@@ -1052,76 +1126,4 @@ const single_item_social_identification = function(config) {
   return view;
 };
 
-// Custom function to build screen for understanding check
-const four_question_forced_choice = function(config) {
-  const view = { 
-    name: config.name,
-    CT:0,
-    trials: config.trials,
-    render: function(CT, magpie) {
-      /* html code
-      Builds a title and 4 statements with a choice between 'true' or 'false' button for each. 
-      Additionally, a button at the bottom of the page leads to the next page. */
-      $("main").html(`<div class='magpie-view' style="float:center;">
-      <center>
-      <h2 id="question" style="margin-top: 1cm;">Is this true about the previous study described in the introdution?</h2>
-      </center>
-      <form>
-        <center>
-        <p id="claim1" style="margin-top: 2cm;">Participants chose which action they prefered.</p>      
-        <input type="radio" id="true1" name="question1" value="true"> <label for="true1">true</label>
-        <input type="radio" id="false1" name="question1" value="false"> <label for="false1">false</label>
 
-        <p id="claim2" style="margin-top: 1cm;">Due to a computer error, participants were not allocated equally to imagine performing the different actions.</p>
-        <input type="radio" id="true2" name="question2" value="true"> <label for="true2">true</label>
-        <input type="radio" id="false2" name="question2" value="false"> <label for="false2">false</label>
-        
-        <p id="claim3" style="margin-top: 1cm;">No data was saved during the experiment.</p>
-        <input type="radio" id="true3" name="question3" value="true"> <label for="true3">true</label>
-        <input type="radio" id="false3" name="question3" value="false"> <label for="false3">false</label>
-        
-        <p id="claim4" style="margin-top: 1cm;">The participants completed the experiment with their eyes closed.</p>
-        <input type="radio" id="true4" name="question4" value="true"> <label for="true4">true</label>
-        <input type="radio" id="false4" name="question4" value="false"> <label for="false4">false</label>
-        </center>
-
-        <center>
-        <button type="submit" id="Next" style="margin-top: 2cm;" >Next</button>
-        </center>
-      </form>
-      `);     
-
-      /* 
-      Response handler for when 'Next' button is clicked on screen. The responses for each of the 4 statements is read 
-      from the html data and saved in the magpie object. */ 
-      (function clickHandlerNext() {
-        const buttonNext = document.getElementById("Next");
-        var form = document.querySelector("form");
-
-        buttonNext.addEventListener("click", event=> {
-          var data = new FormData(form);
-          const responses = []; 
-
-          for (const entry of data) {
-              responses.push(entry[1])
-          };          
-          event.preventDefault();
-
-          let trial_data = {
-            trial_name: "custom understanding check",
-            trial_number: CT + 1,
-            response_claim1: responses[0],
-            response_claim2: responses[1],
-            response_claim3: responses[2],
-            response_claim4: responses[3],
-          };
-
-          // push data to csv
-          magpie.trial_data.push(trial_data);
-          magpie.findNextView();
-        });
-      })(); 
-    }
-  };
-  return view;
-};
