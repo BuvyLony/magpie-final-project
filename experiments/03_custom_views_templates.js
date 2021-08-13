@@ -914,12 +914,12 @@ const four_question_forced_choice = function(config) {
             trial_number: CT + 1,
             response_claim1: responses[0],
             expected_claim1: "true",
-            expected_claim2: "false",
-            expected_claim3: "false",
-            expected_claim4: "false",
             response_claim2: responses[1],
+            expected_claim2: "false",
             response_claim3: responses[2],
-            response_claim4: responses[3],
+            expected_claim3: "false",
+            response_claim4: responses[3],            
+            expected_claim4: "false",
           };
 
           // push data to csv
