@@ -866,7 +866,7 @@ const four_question_forced_choice = function(config) {
       Additionally, a button at the bottom of the page leads to the next page. */
       $("main").html(`<div class='magpie-view' style="float:center;">
       <center>
-      <h2 id="question" style="margin-top: 1cm;">Is this true about the previous study described in the introdution?</h2>
+      <h2 id="question" style="margin-top: 1cm;">Which of the following statement is true?</h2>
       </center>
       <form>
         <center>
