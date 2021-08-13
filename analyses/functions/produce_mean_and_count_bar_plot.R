@@ -1,6 +1,6 @@
 produce_mean_and_count_bar_plot <- function(df, bar_width_means=0.5, bar_width_response=0.4,   arrow_length = 0.4){
   #--Find the higher response proportion so that I can rescale the other proportions relative to that. 
-  response_counts = group_by(df, ingroup_norm_new, both_norms_shown, 'moral dilemma')%>%
+  response_counts = group_by(df, ingroup_norm_new, both_norms_shown, `moral dilemma`)%>%
     summarize(count = length('moral dilemma'))%>%ungroup()
   max_response_count <- max(response_counts)
   #--Set the dimensions of rectangles to add in to plot representing proportions of responses

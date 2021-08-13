@@ -16,10 +16,21 @@ rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 set.seed(123)
 
+
 ```
 
 ## read data
 ```{r}
+#--Set APA theme to use with ggplot
+theme_set(theme_bw(18)+
+            theme(panel.grid.major=element_blank(),
+                  panel.grid.minor=element_blank(),
+                  panel.border=element_blank(),
+                  strip.background=element_blank(),
+                  strip.text = element_text(face="bold"),
+                  axis.line=element_line(),
+                  text=element_text(family="serif")))
+
 all_data <- read.csv("./results_260_XPLab-2021-Group3_974857.csv")
 glimpse(all_data)
 ```
@@ -80,29 +91,48 @@ for(i in 1:nrow(analyse_data)){
   }
 
 }
+# code ingroup pro and outgroup anti to 0 and 1
+for(i in 1:nrow(analyse_data)){
+  if(analyse_data[i,"identification_pro"] == 5 | analyse_data[i,"identification_pro"] == 6 | analyse_data[i,"identification_pro"] == 7){
+  analyse_data[i,"identification_pro"]<- 1
+  } else {
+    analyse_data[i,"identification_pro"] <- 0 
+  }
+
+}
+for(i in 1:nrow(analyse_data)){
+  if(analyse_data[i,"identification_anti"] == 1 | analyse_data[i,"identification_anti"] == 2 | analyse_data[i,"identification_anti"] == 3){
+  analyse_data[i,"identification_anti"]<- 1
+  } else {
+    analyse_data[i,"identification_anti"] <- 0 
+  }
+
+}
+
 
 
 
 ```
 # Analysis
 ```{r}
-#Frequentist Analysis----------------
-length(analyse_data$ingroup_norm_new)
-length(analyse_data$both_norms_shown)
-ordinal_1 <- clm(as.factor(analyse_data$'moral dilemma')~ingroup_norm_new*both_norms_shown, data=analyse_data)
-
-source("functions/produce_mean_and_count_bar_plot.R")
-plot_1 <- produce_mean_and_count_bar_plot(analyse_data, bar_width_means=0.5, bar_width_response=0.3)
-ggsave(file="plot_1.png", plot=plot_1, width=190, height = 110, units="mm")  
+# #Frequentist Analysis----------------
+# length(analyse_data$ingroup_norm_new)
+# length(analyse_data$both_norms_shown)
+# 
+# ordinal_1 <- clm(as.factor(analyse_data$`moral dilemma`)~ingroup_norm_new*both_norms_shown, data=analyse_data)
+# 
+# source("functions/produce_mean_and_count_bar_plot.R")
+# plot_1 <- produce_mean_and_count_bar_plot(analyse_data, bar_width_means=0.5, bar_width_response=0.3)
+# ggsave(file="plot_1.png", plot=plot_1, width=190, height = 110, units="mm")  
 
 #Bayesian analysis------------
 #Prepare data for stan.
 analyse_data <- analyse_data %>%
-  select(expNum, response, ingroupNorm, bothShown, ingroupAgree, outgroupDisagree) %>% #select relevant columns
-  mutate(ingroupAgree = ifelse(is.na(ingroupAgree), 1, ingroupAgree), #For the experiment we assumed that participants identified with the ingroup and not with the outgroup.
-         outgroupDisagree = ifelse(is.na(outgroupDisagree), 1, outgroupDisagree)
+  select(analyse_data$`moral dilemma`, ingroup_norm_new, both_norms_shown, identification_pro, identification_anti) %>% #select relevant columns
+  mutate(identification_pro = ifelse(is.na(identification_pro), 1, identification_pro), #For the experiment we assumed that participants identified with the ingroup and not with the outgroup.
+         identification_anti = ifelse(is.na(identification_anti), 1, identification_anti)
          )
-stan_data_all <- as.list(c(useable_data, N = dim(useable_data)[1]))
-stan_data1 <- as.list(c(filter(useable_data), N=sum(useable_data)))
+stan_data_all <- as.list(c(analyse_data, N = dim(analyse_data)[1]))
+stan_data1 <- as.list(c(filter(analyse_data), N=sum(analyse_data)))
 ```
 
