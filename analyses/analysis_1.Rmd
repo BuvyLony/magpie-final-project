@@ -33,6 +33,7 @@ theme_set(theme_bw(18)+
 
 all_data <- read.csv("./results_260_XPLab-2021-Group3_974857.csv")
 glimpse(all_data)
+typeof(all_data)
 ```
 # Cleaning data
 ```{r}
@@ -77,17 +78,17 @@ analyse_data <- analyse_data %>%
 # def not call the police = 6
 for(i in 1:nrow(analyse_data)){
   if(analyse_data[i,"moral dilemma"] == "Definitely call the police and report the robber"){
-  analyse_data[i,"moral dilemma"]<- 1
+  analyse_data[i,"moral dilemma"]= 1
   } else if (analyse_data[i,"moral dilemma"] == "Very likely call the police and report the robber"){
-  analyse_data[i,"moral dilemma"]<- 2
+  analyse_data[i,"moral dilemma"]= 2
   } else if (analyse_data[i,"moral dilemma"] == "Probably call the police and report the robber"){
-  analyse_data[i,"moral dilemma"]<- 3
+  analyse_data[i,"moral dilemma"]= 3
   } else if (analyse_data[i,"moral dilemma"] == "Probably do nothing and the leave the robber alone"){
-    analyse_data[i,"moral dilemma"]<- 4
+    analyse_data[i,"moral dilemma"]= 4
   } else if (analyse_data[i,"moral dilemma"] == "Very likely do nothing and the leave the robber alone"){
-    analyse_data[i,"moral dilemma"]<- 5
+    analyse_data[i,"moral dilemma"]= 5
   } else if (analyse_data[i,"moral dilemma"] == "Definitely do nothing and leave the robber alone"){
-    analyse_data[i,"moral dilemma"]<- 6
+    analyse_data[i,"moral dilemma"]= 6
   }
 
 }
@@ -106,7 +107,6 @@ for(i in 1:nrow(analyse_data)){
   } else {
     analyse_data[i,"identification_anti"] <- 0 
   }
-
 }
 
 
@@ -118,12 +118,14 @@ for(i in 1:nrow(analyse_data)){
 # #Frequentist Analysis----------------
 # length(analyse_data$ingroup_norm_new)
 # length(analyse_data$both_norms_shown)
-# 
-# ordinal_1 <- clm(as.factor(analyse_data$`moral dilemma`)~ingroup_norm_new*both_norms_shown, data=analyse_data)
-# 
-# source("functions/produce_mean_and_count_bar_plot.R")
-# plot_1 <- produce_mean_and_count_bar_plot(analyse_data, bar_width_means=0.5, bar_width_response=0.3)
-# ggsave(file="plot_1.png", plot=plot_1, width=190, height = 110, units="mm")  
+#typeof(analyse_data[1,analyse_data$`moral dilemma`])
+#<- as.numeric(analyse_data$`moral dilemma`)
+analyse_data$`moral dilemma` <-transform(analyse_data, 'moral dilemma' = as.numeric('moral dilemma'))
+ordinal_1 <- clm(as.factor(analyse_data$`moral dilemma`)~ingroup_norm_new*both_norms_shown, data=analyse_data)
+
+source("functions/produce_mean_and_count_bar_plot.R")
+plot_1 <- produce_mean_and_count_bar_plot(analyse_data, bar_width_means=0.5, bar_width_response=0.3)
+ggsave(file="plot_1.png", plot=plot_1, width=190, height = 110, units="mm")
 
 #Bayesian analysis------------
 #Prepare data for stan.
@@ -133,6 +135,7 @@ analyse_data <- analyse_data %>%
          identification_anti = ifelse(is.na(identification_anti), 1, identification_anti)
          )
 stan_data_all <- as.list(c(analyse_data, N = dim(analyse_data)[1]))
-stan_data1 <- as.list(c(filter(analyse_data), N=sum(analyse_data)))
+#stan_data1 <- as.list(c(filter(analyse_data), N=sum(analyse_data)))
+
 ```
 
