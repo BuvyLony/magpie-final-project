@@ -24,7 +24,6 @@ $("document").ready(function() {
             rating_choice_view,
             understanding_check_instructions,
             custom_understanding_check,
-//            understanding_check,
             identification_measure,
             thanks,
         ],
