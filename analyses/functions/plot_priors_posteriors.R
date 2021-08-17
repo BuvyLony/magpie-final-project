@@ -27,22 +27,22 @@ bIn ~ normal( 0.6/0.75 * 1.27 , 0.5 );
 bOut ~ normal(-0.85/0.75 * 1.27, 0.5);
 }"
 
-fit_SCT_prior=stan(model_code=model_SCT_prior, pars=c("bOut","bBoth","bIn"),control=list(adapt_delta=0.99, max_treedepth=10),
+fit_SCT_prior=rstan::stan(model_code=model_SCT_prior, pars=c("bOut","bBoth","bIn"),control=list(adapt_delta=0.99, max_treedepth=10),
                    iter = 100000, chains = 1, 
                    warmup = 1000, verbose=FALSE, seed=123)
 
-fit_herding_prior=stan(model_code=model_herding_prior, pars=c("bOut","bBoth","bIn"),control=list(adapt_delta=0.99, max_treedepth=10),
+fit_herding_prior=rstan::stan(model_code=model_herding_prior, pars=c("bOut","bBoth","bIn"),control=list(adapt_delta=0.99, max_treedepth=10),
                        iter = 100000, chains = 1, 
                        warmup = 1000, verbose=FALSE, seed=123)
 
 #Extract samples for plotting for each experiment
 extracted_SCT_priors <- data.frame(rstan::extract(fit_SCT_prior)[c("bIn","bBoth","bOut")], model="Self-categorization", info="prior")
 extracted_herding_priors <- data.frame(rstan::extract(fit_herding_prior)[c("bIn","bBoth","bOut")], model="Alternative", info="prior")
-extracted_SCT_posteriors_list <- lapply(c(fit_SCT_1#, fit_SCT_2, fit_SCT_3, fit_SCT_4
+extracted_SCT_posteriors_list <- lapply(c(fit_SCT_all#, fit_SCT_2, fit_SCT_3, fit_SCT_4
                                           ), function(fit_x){
   return(data.frame(rstan::extract(fit_x)[c("bIn","bBoth","bOut")], model="Self-categorization", info="posterior"))
 })
-extracted_herding_posteriors_list <- lapply(c(fit_herding_1#, fit_herding_2, fit_herding_3, fit_herding_4
+extracted_herding_posteriors_list <- lapply(c(fit_herding_all#, fit_herding_2, fit_herding_3, fit_herding_4
                                               ), function(fit_x){
   return(data.frame(rstan::extract(fit_x)[c("bIn","bBoth","bOut")], model="Alternative", info="posterior"))
 })
