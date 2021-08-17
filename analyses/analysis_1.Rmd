@@ -87,6 +87,7 @@ analyse_data <- analyse_data %>%
   rename(
     moral_dilemma = "moral dilemma"
   )
+analyse_data <- as.data.frame(analyse_data)
     
 #change response to moral dilemma
 #def call the police = 1
@@ -103,8 +104,7 @@ for(i in 1:nrow(analyse_data)){
   } else if (analyse_data[i,"moral_dilemma"] == "Very likely do nothing and the leave the robber alone"){
     analyse_data[i,"moral_dilemma"]= 5
   } else if (analyse_data[i,"moral_dilemma"] == "Definitely do nothing and leave the robber alone"){
-    analyse_data[i,"moral_dilemma"]= 6
-  }
+    analyse_data[i,"moral_dilemma"]= 6}
 
 }
 
@@ -113,7 +113,7 @@ for(i in 1:nrow(analyse_data)){
 # code ingroup pro and outgroup anti to 0 and 1
 for(i in 1:nrow(analyse_data)){
   if(analyse_data[i,"identification_pro"] == 5 | analyse_data[i,"identification_pro"] == 6 | analyse_data[i,"identification_pro"] == 7){
-  analyse_data[i,"identification_pro"]<- 1
+  analyse_data[i,"identification_pro"]= 1
   } else {
     analyse_data[i,"identification_pro"] <- 0 
   }
@@ -136,8 +136,8 @@ for(i in 1:nrow(analyse_data)){
 # Analysis
 ```{r}
 # #Frequentist Analysis----------------
-# length(analyse_data$ingroup_norm_new)
-# length(analyse_data$both_norms_shown)
+#make all value numeric
+analyse_data <- mutate_all(analyse_data, function(x) as.numeric(as.character(x)))
 #typeof(analyse_data[1,analyse_data$`moral_dilemma`])
 #<- as.numeric(analyse_data$`moral_dilemma`)
 #as.factor(analyse_data$moral_dilemma)
@@ -151,13 +151,13 @@ for(i in 1:nrow(analyse_data)){
 #Bayesian analysis------------
 #Prepare data for stan.
 analyse_data <- analyse_data %>%
-  select(moral_dilemma, ingroup_norm_new, both_norms_shown, identification_pro, identification_anti) %>% #select relevant columns
-  mutate(identification_pro = ifelse(is.na(identification_pro), 1, identification_pro), #For the experiment we assumed that participants identified with the ingroup and not with the outgroup.
-         identification_anti = ifelse(is.na(identification_anti), 1, identification_anti)
-         )
+  select(submission_id,moral_dilemma, ingroup_norm_new, both_norms_shown, identification_pro, identification_anti) #%>% #select relevant columns
+  # mutate(identification_pro = ifelse(is.na(identification_pro), 1, identification_pro), #For the experiment we assumed that participants identified with the ingroup and not with the outgroup.
+  #        identification_anti = ifelse(is.na(identification_anti), 1, identification_anti)
+  #        )
 #data_num <- as.data.frame(apply(analyse_data,2, as.numeric))
 stan_data_all <- as.list(c(analyse_data, N = dim(analyse_data)[1]))
-#stan_data1 <- as.list(c(filter(analyse_data), N=sum(analyse_data)))
+#stan_data_all <- as.list(c(filter(analyse_data), N=sum(analyse_data)))
 
 
 #--Fit models
