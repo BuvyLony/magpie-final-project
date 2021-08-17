@@ -30,32 +30,35 @@ theme_set(theme_bw(18)+
                   strip.text = element_text(face="bold"),
                   axis.line=element_line(),
                   text=element_text(family="serif")))
-old_data <- read.csv("./results_260_XPLab-2021-Group3_974857.csv")
-all_data <- read.csv("./test_marie.csv")
+#old_data <- read.csv("./results_260_XPLab-2021-Group3_974857.csv")
+all_data <- read.csv("./results_260_XPLab-2021-Group3_974857.csv")
 #glimpse(all_data)
-all_data$submission_id <- 38
+
 typeof(all_data)
 ```
 # Cleaning data
 ```{r}
 #select data to analyse 
-analyse_data <- all_data[-c(2,17,18,19,20,21,22,23,24,25,26)]
+analyse_data <- all_data[-c(2,4,5,6,7,8,9,10,11,21,22,23,25)]
+#exclude previous data -> comment out later
+analyse_data <- analyse_data %>% 
+  filter(submission_id >= 2628 & submission_id<= 2632)
+
 
 #exclude data where understanding check was wrong
 # analyse_data <- analyse_data %>% 
 #   group_by(submission_id) %>% 
 #   filter(all( ( trial_name != "understanding_check" | ((response == "correct" & expected =="correct") | ( response == "incorrect" & expected == "incorrect")))))
 # 
-# analyse_data <- analyse_data %>%
-#   group_by(submission_id) %>%
-#   filter(all( ( trial_name != "custom understanding check" | ((response_claim1 == "true") & (response_claim2 == "false") & (response_claim3 == "false") & (response_claim4 == "false")))))
+analyse_data <- analyse_data %>%
+  group_by(submission_id) %>%
+  filter(all( ( trial_name != "custom understanding check" | ((response_claim1 == "true") & (response_claim2 == "false") & (response_claim3 == "false") & (response_claim4 == "false")))))
 
 # change ingroup norm
 
 analyse_data <- analyse_data %>%
-  mutate(ingroup_norm_new = case_when(grepl("chose to do nothing and leave the robber alone.$",analyse_data$ingroup_norm) ~ 1,
-                           grepl("chose to call the police and report the robber.$",analyse_data$ingroup_norm) ~ 0))
-
+  mutate(ingroup_norm_new = case_when(grepl("chose to do nothing and leave the robber alone.$",ingroup_norm) ~ 1,
+                           grepl("chose to call the police and report the robber.$",ingroup_norm) ~ 0))
 
 
 
@@ -124,7 +127,7 @@ for(i in 1:nrow(analyse_data)){
   }
 }
 
-analyse_data <- analyse_data[-c(2,3,5,6,7,8,9,10,11,12,13,14,16,17,20)]
+#analyse_data <- analyse_data[-c(2,3,5,6,7,8,9,10,11,12,13,14,16,17,20)]
 
 
 
@@ -138,7 +141,7 @@ analyse_data <- analyse_data[-c(2,3,5,6,7,8,9,10,11,12,13,14,16,17,20)]
 #typeof(analyse_data[1,analyse_data$`moral_dilemma`])
 #<- as.numeric(analyse_data$`moral_dilemma`)
 #as.factor(analyse_data$moral_dilemma)
-#analyse_data$`moral_dilemma` <-transform(analyse_data, 'moral_dilemma' = as.numeric('moral_dilemma'))
+#analyse_data <- as.numeric(analyse_data)
 #ordinal_1 <- clm(as.factor(moral_dilemma)~ ingroup_norm_new*both_norms_shown, data=analyse_data)
 
 # source("functions/produce_mean_and_count_bar_plot.R")
@@ -155,6 +158,7 @@ analyse_data <- analyse_data %>%
 #data_num <- as.data.frame(apply(analyse_data,2, as.numeric))
 stan_data_all <- as.list(c(analyse_data, N = dim(analyse_data)[1]))
 #stan_data1 <- as.list(c(filter(analyse_data), N=sum(analyse_data)))
+
 
 #--Fit models
 fit_SCT_all <- stan(file = "stan_models/SCT.stan", data=stan_data_all, iter=10000, chains=4, seed = 123, control=list(adapt_delta = 0.99))
