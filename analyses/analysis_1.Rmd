@@ -9,8 +9,10 @@ output: html_document
 library(tidyverse)
 library(dplyr)
 library(ordinal)
+library(StanHeaders)
 library(rstan)
 library(bridgesampling)
+library(shiny)
 library(shinystan)
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
@@ -33,6 +35,11 @@ theme_set(theme_bw(18)+
 
 all_data <- read.csv("./results_260_XPLab-2021-Group3_974857.csv")
 glimpse(all_data)
+
+n_participants_raw <- all_data %>% 
+  group_by(submission_id) %>% 
+  summarise() %>% 
+  nrow(.)  
 ```
 # Cleaning data
 ```{r}
@@ -42,9 +49,14 @@ analyse_data <- all_data[-c(3,4,6,7,9,10,17,20,21,22,24)]
 analyse_data <- analyse_data %>% 
   group_by(submission_id) %>% 
   filter(all( ( trial_name != "understanding_check" | ((response == "correct" & expected =="correct") | ( response == "incorrect" & expected == "incorrect")))))
+glimpse(analyse_data)
+# see how many participants were excluded bco understanding check
+n_participants_raw - analyse_data %>% 
+  group_by(submission_id) %>% 
+  summarise() %>% 
+  nrow(.)  
 
-# change ingroup norm
-
+# change ingroup norm to 1 (do nothing) or 0 (call police)
 analyse_data <- analyse_data %>%
   mutate(ingroup_norm_new = case_when(grepl("chose to do nothing and leave the robber alone.$",analyse_data$ingroup_norm) ~ 1,
                            grepl("chose to call the police and report the robber.$",analyse_data$ingroup_norm) ~ 0))
