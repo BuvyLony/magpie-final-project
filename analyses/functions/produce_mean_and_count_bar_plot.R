@@ -1,23 +1,23 @@
 produce_mean_and_count_bar_plot <- function(df, bar_width_means=0.5, bar_width_response=0.4,   arrow_length = 0.4){
   #--Find the higher response proportion so that I can rescale the other proportions relative to that. 
-  response_counts = group_by(df, ingroup_norm_new, both_norms_shown, `moral dilemma`)%>%
-    summarize(count = length('moral dilemma'))%>%ungroup()
+  response_counts = group_by(df, ingroup_norm_new, both_norms_shown, moral_dilemma)%>%
+    summarize(count = length(moral_dilemma))%>%ungroup()
   max_response_count <- max(response_counts)
   #--Set the dimensions of rectangles to add in to plot representing proportions of responses
-  props <- group_by(df, ingroup_norm_new, both_norms_shown, 'moral dilemma') %>%
-    summarize(count = length('moral dilemma'), 
+  props <- group_by(df, ingroup_norm_new, both_norms_shown, moral_dilemma) %>%
+    summarize(count = length(moral_dilemma), 
               relative_proportion = count/max_response_count,
               xmin = ingroup_norm_new[1] - bar_width_means/1.5,
               xmax = xmin + relative_proportion*bar_width_means,
-              ymin = 'moral dilemma'[1] - bar_width_response, 
-              ymax = 'moral dilemma'[1] + bar_width_response) %>%ungroup()
+              ymin = moral_dilemma[1] - bar_width_response, 
+              ymax = moral_dilemma[1] + bar_width_response) %>%ungroup()
   props$both_norms_shown = factor(props$both_norms_shown, labels=c("Only ingroup norm shown", "Both norms shown"))
   
   
   #--Find mean responses for each condition
   means <- group_by(df, ingroup_norm_new, both_norms_shown) %>%
-    summarize(meanResponse = mean('moral dilemma'),
-              stdErrResponse = sd('moral dilemma')/sqrt(length('moral dilemma')),
+    summarize(meanResponse = mean(moral_dilemma),
+              stdErrResponse = sd(moral_dilemma)/sqrt(length(moral_dilemma)),
               boundLower = meanResponse - stdErrResponse,
               boundUpper = meanResponse + stdErrResponse
     ) %>% ungroup()

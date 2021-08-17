@@ -1,8 +1,8 @@
 data{
     int<lower=1> N;
-    int response[N];
-    int bothShown[N];
-    real ingroupNorm[N];
+    int moral_dilemma[N];
+    int both_norms_shown[N];
+    real identification_pro[N];
 }
 parameters{
     ordered[5] cutpoints;
@@ -18,8 +18,8 @@ model{
     bIn ~ normal( 0.6/0.75 * 1.02 , 0.5 );
     bBoth ~ normal( 0 , 0.5 );
     for ( i in 1:N ) {
-        phi[i] = bIn * ingroupNorm[i] + bBoth * bothShown[i] + bOut * bothShown[i] * ingroupNorm[i];
-        response[i] ~ ordered_logistic( phi[i] , cutpoints );
+        phi[i] = bIn * identification_pro[i] + bBoth * both_norms_shown[i] + bOut * both_norms_shown[i] * identification_pro[i];
+        moral_dilemma[i] ~ ordered_logistic( phi[i] , cutpoints );
     }
 }
 generated quantities{
@@ -28,8 +28,8 @@ generated quantities{
     vector[N] log_lik;
     dev = 0;
     for ( i in 1:N ) {
-        phi[i] = bIn * ingroupNorm[i] + bBoth * bothShown[i] + bOut * bothShown[i] * ingroupNorm[i];
-    dev = dev + (-2)*ordered_logistic_lpmf( response[i] | phi[i] , cutpoints );
-    log_lik[i] = ordered_logistic_lpmf( response[i] | phi[i] , cutpoints );
+        phi[i] = bIn * identification_pro[i] + bBoth * both_norms_shown[i] + bOut * both_norms_shown[i] * identification_pro[i];
+    dev = dev + (-2)*ordered_logistic_lpmf( moral_dilemma[i] | phi[i] , cutpoints );
+    log_lik[i] = ordered_logistic_lpmf( moral_dilemma[i] | phi[i] , cutpoints );
     }
 }
