@@ -40,6 +40,7 @@ n_participants_raw <- all_data %>%
   group_by(submission_id) %>% 
   summarise() %>% 
   nrow(.)  
+n_participants_raw
 
 # look at data
 all_data %>% tbl_df %>% rmarkdown::paged_table()
@@ -59,19 +60,20 @@ n_excluded <- n_participants_raw - analyse_data %>%
   nrow(.)  
 n_excluded
 
-
 # change ingroup norm to 1 (do nothing) or 0 (call police)
 analyse_data <- analyse_data %>%
   mutate(ingroup_norm_new = ifelse(grepl("chose to do nothing and leave the robber alone.$",ingroup_norm),1,ifelse(grepl("chose to call the police and report the robber.$",ingroup_norm),0,NA)))
 
+# drop data of understanding check and old ingroup norm coding
+analyse_data <- subset(analyse_data, select = -c(expected_claim1, expected_claim2, expected_claim3, expected_claim4, response_claim1, response_claim2, response_claim3, response_claim4, ingroup_norm))
 # exclude questions of understanding check
+analyse_data <- analyse_data[analyse_data$trial_name != "custom understanding check", ]    
 
-analyse_data <- analyse_data[analyse_data$trial_name != "understanding_check", ]    
 # new labels for better understanding
-analyse_data <- mutate(analyse_data, condition = ifelse(ingroup_norm_new ==0 & both_norms_shown ==0, "Ingroup norm favoured, call police, only ingroup norm shown",
-                                                  ifelse(ingroup_norm_new ==1 & both_norms_shown==0, "Ingroup norm favoured, leave robber alone, only ingroup norm shown",
-                                                         ifelse(ingroup_norm_new ==1 & both_norms_shown==1, "Ingroup norm favoured, leaving robber alone, both norms shown",
-                                                                ifelse(ingroup_norm_new ==0 & both_norms_shown ==1,"Ingroup norm favoured, calling the police, both norms shown",
+analyse_data <- mutate(analyse_data, condition = ifelse(ingroup_norm_new ==0 & both_norms_shown ==0, "Ingroup norm favoured calling police, only ingroup norm shown",
+                                                  ifelse(ingroup_norm_new ==1 & both_norms_shown==0, "Ingroup norm favoured leaving robber alone, only ingroup norm shown",
+                                                         ifelse(ingroup_norm_new ==1 & both_norms_shown==1, "Ingroup norm favoured leaving robber alone, both norms shown",
+                                                                ifelse(ingroup_norm_new ==0 & both_norms_shown ==1,"Ingroup norm favoured calling the police, both norms shown",
                                                                        NA)))))
 # look at data
 analyse_data %>% tbl_df %>% rmarkdown::paged_table()
@@ -84,6 +86,10 @@ analyse_data <- pivot_wider(analyse_data,
     names_from = trial_name,
     values_from = response
   )
+
+# look at data
+analyse_data %>% tbl_df %>% rmarkdown::paged_table()
+
 analyse_data <- analyse_data %>% 
   group_by(submission_id) %>%
     summarise_each(funs(toString(na.omit(.))))
@@ -113,6 +119,7 @@ for(i in 1:nrow(analyse_data)){
     analyse_data[i,"moral_dilemma"]= 6}
 
 }
+
 # code ingroup pro and outgroup anti to 0 and 1
 for(i in 1:nrow(analyse_data)){
   if(analyse_data[i,"identification_pro"] == 5 | analyse_data[i,"identification_pro"] == 6 | analyse_data[i,"identification_pro"] == 7){
@@ -121,6 +128,7 @@ for(i in 1:nrow(analyse_data)){
     analyse_data[i,"identification_pro"] <- 0 
   }
 
+# code identification measure as 1 (1-3) or 0 (4-7)
 }
 for(i in 1:nrow(analyse_data)){
   if(analyse_data[i,"identification_anti"] == 1 | analyse_data[i,"identification_anti"] == 2 | analyse_data[i,"identification_anti"] == 3){
@@ -128,10 +136,9 @@ for(i in 1:nrow(analyse_data)){
   } else {
     analyse_data[i,"identification_anti"] <- 0 
   }
-
 }
-# safe data in this format for later
-cleaned_data <- analyse_data
+
+# code issues as numbers 0-8
 for(i in 1:nrow(cleaned_data)){
   if(cleaned_data[i,"issue"] == "Gun control"){
   cleaned_data[i,"issue"]= 0
@@ -153,6 +160,8 @@ for(i in 1:nrow(cleaned_data)){
     cleaned_data[i,"issue"]= 8
   }  }
 
+# safe data in this format for later
+cleaned_data <- analyse_data
 # look at data
 cleaned_data %>% tbl_df %>% rmarkdown::paged_table()
 
@@ -166,6 +175,7 @@ cleaned_data %>% tbl_df %>% rmarkdown::paged_table()
 #make all value numeric
 analyse_data <- mutate_all(analyse_data, function(x) as.numeric(as.character(x)))
 ordinal_1 <- clm(as.factor(moral_dilemma)~ ingroup_norm_new*both_norms_shown, data=analyse_data)
+
 # 
 source("functions/produce_mean_and_count_bar_plot.R")
 plot_1 <- produce_mean_and_count_bar_plot(analyse_data, bar_width_means=0.5, bar_width_response=0.3)
