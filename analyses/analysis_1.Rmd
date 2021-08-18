@@ -62,7 +62,7 @@ n_excluded
 
 # change ingroup norm to 1 (do nothing) or 0 (call police)
 analyse_data <- analyse_data %>%
-  mutate(ingroup_norm_new = ifelse(grepl("chose to do nothing and leave the robber alone.$",ingroup_norm),1,ifelse(grepl("chose to call the police and report the robber.$",ingroup_norm),0,NA)))
+  mutate(ingroup_norm_new = ifelse(grepl("chose to do nothing and leave the robber alone.$",ingroup_norm),1,ifelse(grepl("chose to call the police and report the robber.$",ingroup_norm),-1,NA)))
 
 # drop data of understanding check and old ingroup norm coding
 analyse_data <- subset(analyse_data, select = -c(expected_claim1, expected_claim2, expected_claim3, expected_claim4, response_claim1, response_claim2, response_claim3, response_claim4, ingroup_norm))
@@ -120,15 +120,13 @@ for(i in 1:nrow(analyse_data)){
 
 }
 
-# code ingroup pro and outgroup anti to 0 and 1
+# code pro and anti group identification to 0 and 1
 for(i in 1:nrow(analyse_data)){
   if(analyse_data[i,"identification_pro"] == 5 | analyse_data[i,"identification_pro"] == 6 | analyse_data[i,"identification_pro"] == 7){
   analyse_data[i,"identification_pro"]<- 1
   } else {
     analyse_data[i,"identification_pro"] <- 0 
   }
-
-# code identification measure as 1 (1-3) or 0 (4-7)
 }
 for(i in 1:nrow(analyse_data)){
   if(analyse_data[i,"identification_anti"] == 1 | analyse_data[i,"identification_anti"] == 2 | analyse_data[i,"identification_anti"] == 3){
@@ -137,6 +135,11 @@ for(i in 1:nrow(analyse_data)){
     analyse_data[i,"identification_anti"] <- 0 
   }
 }
+
+# TODO add columns to show ingroup and outgroup of participant: evaluate statement response
+
+# TODO add columns "ingroup_agree" and "outgroup_agree" to include influence of identification in model
+
 
 # code issues as numbers 0-8
 for(i in 1:nrow(cleaned_data)){
