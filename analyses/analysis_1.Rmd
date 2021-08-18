@@ -136,7 +136,11 @@ for(i in 1:nrow(analyse_data)){
   }
 }
 
-# TODO add columns to show ingroup and outgroup of participant: evaluate statement response
+# add columns representing ingroup and outgroup of participant
+analyse_data <- analyse_data %>%
+  mutate(ingroup = ifelse(analyse_data$`statement rating` >= 1,"pro", "anti"))
+
+analyse_data %>% tbl_df %>% rmarkdown::paged_table()
 
 # TODO add columns "ingroup_agree" and "outgroup_agree" to include influence of identification in model
 
