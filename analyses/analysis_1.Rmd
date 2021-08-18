@@ -87,9 +87,6 @@ analyse_data <- pivot_wider(analyse_data,
     values_from = response
   )
 
-# look at data
-analyse_data %>% tbl_df %>% rmarkdown::paged_table()
-
 analyse_data <- analyse_data %>% 
   group_by(submission_id) %>%
     summarise_each(funs(toString(na.omit(.))))
@@ -137,11 +134,14 @@ for(i in 1:nrow(analyse_data)){
 }
 
 # add columns representing ingroup and outgroup of participant
+# if participant was neutral about statement, exclude their data
 analyse_data <- analyse_data %>%
-  mutate(ingroup = ifelse(analyse_data$`statement rating` >= 1,"pro", "anti"))
-
+  mutate(ingroup = ifelse(analyse_data$`statement rating` >= 1,"pro", ifelse(analyse_data$`statement rating` < 0, "anti", "exclude")))
 analyse_data %>% tbl_df %>% rmarkdown::paged_table()
 
+analyse_data <- analyse_data %>%
+  filter(ingroup != "exclude")
+  
 # TODO add columns "ingroup_agree" and "outgroup_agree" to include influence of identification in model
 
 
