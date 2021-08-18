@@ -34,35 +34,35 @@ theme_set(theme_bw(18)+
                   text=element_text(family="serif")))
 
 all_data <- read.csv("./results_260_XPLab-2021-Group3_974857.csv")
-glimpse(all_data)
+
 # total number of participants
 n_participants_raw <- all_data %>% 
   group_by(submission_id) %>% 
   summarise() %>% 
   nrow(.)  
+
+# look at data
+all_data %>% tbl_df %>% rmarkdown::paged_table()
 ```
 # Cleaning data
 ```{r}
 #select data to analyse. drop columns endTime(5), experiment_id(10), startDate(21), startTime(22), timeSpent(23), trial_number(25)
 analyse_data <- all_data[-c(5, 10, 21, 22, 23, 25)]
-glimpse(analyse_data)
 #exclude data where understanding check was wrong
 analyse_data <- analyse_data %>% 
   group_by(submission_id) %>% 
   filter(all( ( trial_name != "understanding_check" | ((response_claim1 == "correct" &  response_claim2 == "incorrect" & response_claim3 == "incorrect" & response_claim4 == "incorrect")))))
 # look how many were excluded bco understanding check
-n_participants_raw - analyse_data %>% 
+n_excluded <- n_participants_raw - analyse_data %>% 
   group_by(submission_id) %>% 
   summarise() %>% 
   nrow(.)  
+n_excluded
+
 
 # change ingroup norm to 1 (do nothing) or 0 (call police)
 analyse_data <- analyse_data %>%
   mutate(ingroup_norm_new = ifelse(grepl("chose to do nothing and leave the robber alone.$",ingroup_norm),1,ifelse(grepl("chose to call the police and report the robber.$",ingroup_norm),0,NA)))
-
-
-
-
 
 # exclude questions of understanding check
 
@@ -73,8 +73,13 @@ analyse_data <- mutate(analyse_data, condition = ifelse(ingroup_norm_new ==0 & b
                                                          ifelse(ingroup_norm_new ==1 & both_norms_shown==1, "Ingroup norm favoured, leaving robber alone, both norms shown",
                                                                 ifelse(ingroup_norm_new ==0 & both_norms_shown ==1,"Ingroup norm favoured, calling the police, both norms shown",
                                                                        NA)))))
-# make wider
+# look at data
+analyse_data %>% tbl_df %>% rmarkdown::paged_table()
+```
 
+# data wrangling
+```{r}
+# make wider
 analyse_data <- pivot_wider(analyse_data,
     names_from = trial_name,
     values_from = response
@@ -148,10 +153,8 @@ for(i in 1:nrow(cleaned_data)){
     cleaned_data[i,"issue"]= 8
   }  }
 
-
-
-
-
+# look at data
+cleaned_data %>% tbl_df %>% rmarkdown::paged_table()
 
 ```
 # Analysis
