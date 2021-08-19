@@ -153,8 +153,8 @@ n_excluded_statement
 # column "ingroup_agree" is 1 if participant identifies with ingroup and 0 if not -> TODO is irgendwie immer 1 aber sollte bei nr3 0 sein :(
 # column "ingroup disagree" is 1 if participant does not identify with outgroup and 1 otherwise
 analyse_data <- analyse_data %>%
-  mutate(ingroup_agree = ifelse( ((analyse_data$ingroup == "pro" && analyse_data$identification_pro == 1) || (analyse_data$ingroup == "anti" && analyse_data$identification_anti == 1)), 1, 0)) %>%
-  mutate(outgroup_disagree = ifelse( ((analyse_data$outgroup == "pro" && analyse_data$identification_pro == 0) || (analyse_data$outgroup == "anti" && analyse_data$identification_anti == 0)), 1, 0))
+  mutate(ingroup_agree = ifelse( ((analyse_data$ingroup == "pro" & analyse_data$identification_pro == 1) | (analyse_data$ingroup == "anti" & analyse_data$identification_anti == 1)), 1, 0)) %>%
+  mutate(outgroup_disagree = ifelse( ((analyse_data$outgroup == "pro" & analyse_data$identification_pro == 0) | (analyse_data$outgroup == "anti" && analyse_data$identification_anti == 0)), 1, 0))
 analyse_data %>% tbl_df %>% rmarkdown::paged_table()
 
 # code issues as numbers 0-8
