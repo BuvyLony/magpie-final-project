@@ -160,25 +160,25 @@ analyse_data <- analyse_data %>%
 analyse_data %>% tbl_df %>% rmarkdown::paged_table()
 
 # code issues as numbers 0-8
-for(i in 1:nrow(cleaned_data)){
-  if(cleaned_data[i,"issue"] == "Gun control"){
-  cleaned_data[i,"issue"]= 0
-  } else if (cleaned_data[i,"issue"] == "Feminism"){
-  cleaned_data[i,"issue"]= 1
-  } else if (cleaned_data[i,"issue"] == "Joe Biden"){
-  cleaned_data[i,"issue"]= 2
-  } else if (cleaned_data[i,"issue"] == "Immigration and Dreamers"){
-    cleaned_data[i,"issue"]= 3
-  } else if (cleaned_data[i,"issue"] == "Transgender rights"){
-    cleaned_data[i,"issue"]= 4
-  } else if (cleaned_data[i,"issue"] == "Drug legalization"){
-    cleaned_data[i,"issue"]= 5
-  } else if (cleaned_data[i,"issue"] == "Colin Kaepernick kneeling during the national anthem"){
-    cleaned_data[i,"issue"]= 6
-  } else if (cleaned_data[i,"issue"] == "Buying and wearing fur"){
-    cleaned_data[i,"issue"]= 7
-  } else if (cleaned_data[i,"issue"] == "Taxing religious organizations"){
-    cleaned_data[i,"issue"]= 8
+for(i in 1:nrow(analyse_data)){
+  if(analyse_data[i,"issue"] == "Gun control"){
+  analyse_data[i,"issue"]= 0
+  } else if (analyse_data[i,"issue"] == "Feminism"){
+  analyse_data[i,"issue"]= 1
+  } else if (analyse_data[i,"issue"] == "Joe Biden"){
+  analyse_data[i,"issue"]= 2
+  } else if (analyse_data[i,"issue"] == "Immigration and Dreamers"){
+    analyse_data[i,"issue"]= 3
+  } else if (analyse_data[i,"issue"] == "Transgender rights"){
+    analyse_data[i,"issue"]= 4
+  } else if (analyse_data[i,"issue"] == "Drug legalization"){
+    analyse_data[i,"issue"]= 5
+  } else if (analyse_data[i,"issue"] == "Colin Kaepernick kneeling during the national anthem"){
+    analyse_data[i,"issue"]= 6
+  } else if (analyse_data[i,"issue"] == "Buying and wearing fur"){
+    analyse_data[i,"issue"]= 7
+  } else if (analyse_data[i,"issue"] == "Taxing religious organizations"){
+    analyse_data[i,"issue"]= 8
   }  }
 
 # safe data in this format for later
