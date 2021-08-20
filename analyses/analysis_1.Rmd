@@ -1,6 +1,6 @@
 ---
 title: "final project analysis script"
-author: "the group"
+author: "Alina Ohnesorge, Clara Matheis, Iolanta Martirosov, Marie Bensien"
 date: "28 7 2021"
 output: html_document
 ---
@@ -67,14 +67,14 @@ analyse_data <- analyse_data %>%
 # drop data of understanding check and old ingroup norm coding
 analyse_data <- subset(analyse_data, select = -c(expected_claim1, expected_claim2, expected_claim3, expected_claim4, response_claim1, response_claim2, response_claim3, response_claim4, ingroup_norm))
 # exclude questions of understanding check
-analyse_data <- analyse_data[analyse_data$trial_name != "custom understanding check", ]    
+analyse_data <- analyse_data[analyse_data$trial_name != "custom understanding check", ]
 
-# new labels for better understanding
-analyse_data <- mutate(analyse_data, condition = ifelse(ingroup_norm_new ==0 & both_norms_shown ==0, "Ingroup norm favoured calling police, only ingroup norm shown",
-                                                  ifelse(ingroup_norm_new ==1 & both_norms_shown==0, "Ingroup norm favoured leaving robber alone, only ingroup norm shown",
-                                                         ifelse(ingroup_norm_new ==1 & both_norms_shown==1, "Ingroup norm favoured leaving robber alone, both norms shown",
-                                                                ifelse(ingroup_norm_new ==0 & both_norms_shown ==1,"Ingroup norm favoured calling the police, both norms shown",
-                                                                       NA)))))
+# new labels for better understanding: TODO maybe keep for plotting purposes
+#analyse_data <- mutate(analyse_data, condition = ifelse(ingroup_norm_new ==0 & both_norms_shown ==0, "Ingroup norm favoured calling police, only ingroup norm shown",
+#                                                  ifelse(ingroup_norm_new ==1 & both_norms_shown==0, "Ingroup norm favoured leaving robber alone, only ingroup norm shown",
+#                                                         ifelse(ingroup_norm_new ==1 & both_norms_shown==1, "Ingroup norm favoured leaving robber alone, both norms shown",
+#                                                                ifelse(ingroup_norm_new ==0 & both_norms_shown ==1,"Ingroup norm favoured calling the police, both norms shown",
+#                                                                       NA)))))
 # look at data
 analyse_data %>% tbl_df %>% rmarkdown::paged_table()
 ```
@@ -152,10 +152,9 @@ n_excluded_statement
   
 # add columns to include influence of identification in model:
 # column "ingroup_agree" is 1 if participant identifies with ingroup and 0 if not 
-# column "ingroup disagree" is 1 if participant does not identify with outgroup and 1 otherwise
+# column "outgroup disagree" is 1 if participant does not identify with outgroup and 1 otherwise
 analyse_data <- analyse_data %>%
   mutate(ingroup_agree = ifelse( ((analyse_data$ingroup == "pro" & analyse_data$identification_pro == 1) | (analyse_data$ingroup == "anti" & analyse_data$identification_anti == 1)), 1, 0)) %>%
-
   mutate(outgroup_disagree = ifelse( ((analyse_data$outgroup == "pro" & analyse_data$identification_pro == 0) | (analyse_data$outgroup == "anti" & analyse_data$identification_anti == 0)), 1, 0))
 analyse_data %>% tbl_df %>% rmarkdown::paged_table()
 
@@ -187,82 +186,32 @@ cleaned_data <- analyse_data
 cleaned_data %>% tbl_df %>% rmarkdown::paged_table()
 
 ```
-# Analysis
+# Frequentist Analysis
 ```{r}
-# #Frequentist Analysis----------------
-# length(analyse_data$ingroup_norm_new)
-# length(analyse_data$both_norms_shown)
-# 
-#make all value numeric
+#make all values numeric
 analyse_data <- mutate_all(analyse_data, function(x) as.numeric(as.character(x)))
+# fit regression model and look at parameters TODO: read up how to ?
 ordinal_1 <- clm(as.factor(moral_dilemma)~ ingroup_norm_new*both_norms_shown, data=analyse_data)
+ordinal_1
+# produce plot for answer dist TODO maybe delete
+#source("functions/produce_mean_and_count_bar_plot.R")
+#plot_1 <- produce_mean_and_count_bar_plot(analyse_data, bar_width_means=0.5, bar_width_response=0.3)
+#ggsave(file="plot_1.png", plot=plot_1, width=190, height = 110, units="mm")  
 
-# 
-source("functions/produce_mean_and_count_bar_plot.R")
-plot_1 <- produce_mean_and_count_bar_plot(analyse_data, bar_width_means=0.5, bar_width_response=0.3)
-ggsave(file="plot_1.png", plot=plot_1, width=190, height = 110, units="mm")  
-
-#Bayesian analysis------------
-#Prepare data for stan.
-analyse_data <- analyse_data %>%
-  select(moral_dilemma, ingroup_norm_new, both_norms_shown, identification_pro, identification_anti) %>% #select relevant columns
-  mutate(identification_pro = ifelse(is.na(identification_pro), 1, identification_pro), #For the experiment we assumed that participants identified with the ingroup and not with the outgroup.
-         identification_anti = ifelse(is.na(identification_anti), 1, identification_anti)
-         )
+```
+# Bayesian Analysis
+```{r}
+#Prepare data for stan by making it a list and adding an entry for number of data points
 stan_data_all <- as.list(c(analyse_data, N = dim(analyse_data)[1]))
-#stan_data1 <- as.list(c(filter(analyse_data), N=sum(analyse_data)))
 
-#--Fit models
-fit_SCT_all <- rstan::stan(file = "stan_models/SCT.stan", data=stan_data_all, iter=10000, chains=4, seed = 123, control=list(adapt_delta = 0.99))
-fit_herding_all <- rstan::stan(file = "stan_models/herding.stan", data=stan_data_all, iter=10000, chains=4, control=list(adapt_delta = 0.99))
+# Fit models
+fit_self_categorization_model <- rstan::stan(file = "stan_models/self_categorization_model.stan", data=stan_data_all, iter=10000, chains=4, seed = 123, control=list(adapt_delta = 0.99))
+fit_descriptive_norm_model <- rstan::stan(file = "stan_models/descriptive_norm_model.stan", data=stan_data_all, iter=10000, chains=4, control=list(adapt_delta = 0.99))
 
-#--Compare models using Bayes Factors
-marg_lik_SCT_all <- bridge_sampler(samples = fit_SCT_all)
-marg_lik_herding_all <- bridge_sampler(samples = fit_herding_all)
-bf(marg_lik_herding_all,marg_lik_SCT_all)
+# compute Bayes Factor
+marg_lik_self_categorization_model <- bridge_sampler(samples = fit_self_categorization_model)
+marg_lik_descriptive_norm_model <- bridge_sampler(samples = fit_descriptive_norm_model)
+bf(marg_lik_descriptive_norm_model,marg_lik_self_categorization_model)
 
-
-#Create prior-posterior plots-------
-# source("functions/plot_priors_posteriors.R")
-# 
-# #Plot which issues people cared about and the extent to which they agreed with them-------
-# issue_plot_3 <- ggplot(cleaned_data, aes(x=factor(issue,labels = c(#"Gun control", 
-#                                                  "Feminism",
-#                                                  #"Joe Biden",
-#                                                  #"Immigration and Dreamers",
-#                                                  "Transgender rights",
-#                                                  #"Drug legalization",
-#                                                  "Colin Kaepernick kneeling during the national anthem",
-#                                                  "Buying and wearing fur"
-#                                                  #"Taxing religious organizations"
-#                                                  )
-#                                                 ),
-#                   y = "statement rating", 
-#                   colour = factor(issue),
-#                   fill = factor(issue))) + 
-#   geom_dotplot(binaxis = "y", stackdir = "center", binwidth = 0.15) +
-#   labs(x = "Issue", y="Agreement") + 
-#   guides(color=FALSE, fill=FALSE)+
-#   scale_y_continuous(breaks=c(0,5,10), labels = c("Strongly disagree", "Neutral", "Strongly agree"))
-# ggsave("issue_plot_3.png", issue_plot_3, width=34, height=13, units="cm")
-# 
-# issue_plot_4 <- ggplot(cleaned_data, aes(x=factor(issue#, #labels = c("Gun \n control", 
-# #                                                                 "Feminism", 
-# #                                                                 "Joe \n Biden", 
-# #                                                                 "Immigration",
-# #                                                                 "Transgender \n rights",
-# #                                                                 "Drug \n legalization",
-# #                                                                 "Colin \n Kaepernick",
-# #                                                                 "Fur is \n wrong",
-# #                                                                 "Taxing religious organizations")
-# ),
-#                                   y = issue, 
-#                                   colour = factor(issue),
-#                                   fill = factor(issue))) + 
-#   geom_dotplot(binaxis = "y", stackdir = "center", binwidth = 0.15) +
-#   labs(x = "Issue", y="Agreement") + 
-#   guides(color=FALSE, fill=FALSE)+
-#   scale_y_continuous(breaks=c(0,5,10), labels = c("Strongly disagree", "Neutral", "Strongly agree"))
-# ggsave("issue_plot_4.png", issue_plot_4, width=34, height=13, units="cm")
 ```
 
