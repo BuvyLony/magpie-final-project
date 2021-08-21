@@ -149,6 +149,7 @@ analyse_data <- analyse_data %>%
 # look how many were excluded bco neutral statement rating
 n_excluded_statement <- n_participants_cleaned- nrow(analyse_data) 
 n_excluded_statement
+n_participants_cleaned <- nrow(analyse_data)
   
 # add columns to include influence of identification in model:
 # column "ingroup_agree" is 1 if participant identifies with ingroup and 0 if not 
@@ -183,21 +184,43 @@ for(i in 1:nrow(analyse_data)){
 # safe data in this format for later
 cleaned_data <- analyse_data
 # look at data
-cleaned_data %>% tbl_df %>% rmarkdown::paged_table()
+analyse_data %>% tbl_df %>% rmarkdown::paged_table()
 
 ```
+
 # Frequentist Analysis
 ```{r}
-#make all values numeric
-analyse_data <- mutate_all(analyse_data, function(x) as.numeric(as.character(x)))
-# fit regression model and look at parameters TODO: read up how to ?
-ordinal_1 <- clm(as.factor(moral_dilemma)~ ingroup_norm_new*both_norms_shown, data=analyse_data)
-ordinal_1
-# produce plot for answer dist TODO maybe delete
-#source("functions/produce_mean_and_count_bar_plot.R")
-#plot_1 <- produce_mean_and_count_bar_plot(analyse_data, bar_width_means=0.5, bar_width_response=0.3)
-#ggsave(file="plot_1.png", plot=plot_1, width=190, height = 110, units="mm")  
+# gender stats
+analyse_data$gender <- as.character(analyse_data$gender)
+analyse_data %>%
+  summarise(num_females = sum(gender == "female"),
+            num_males = sum(gender == "male, male"),
+            num_non_binary = sum(gender == "non-binary, non-binary"),
+            num_NA = sum(gender == "undefined. undefined"),
+            percent_female = num_females / n_participants_cleaned,
+            percent_male = num_males / n_participants_cleaned,
+            percent_non_binary = num_non_binary / n_participants_cleaned,
+            percent_NA = num_NA / n_participants_cleaned)
 
+# age stats
+ages <- analyse_data$age %>% stri_remove_empty
+for (i in 1:length(ages)) {
+  ages[i] <- substr(ages[i], 1, 2)
+}
+ages <- as.numeric(ages)
+c(mean_ages = mean(as.numeric(ages)), median_ages = median(as.numeric(ages)))
+
+#make all values numeric
+analyse_data <- suppressWarnings(mutate_all(analyse_data, function(x) as.numeric(as.character(x))))
+
+# fit ordinal regression model (cumulative logit model) and look at parameters
+ordinal_1 <- clm(as.factor(moral_dilemma)~ ingroup_norm_new*both_norms_shown, data=analyse_data)
+summary(ordinal_1)
+# compute OR (odds ratio)
+round(exp(ordinal_1$beta), 3)
+# compute 95% confidence intervals
+confint(ordinal_1)
+## significance is coded as p-values: (*** = 0), (** = 0.001), (* = 0.01), (. = 0.1), otherwise 1
 ```
 # Bayesian Analysis
 ```{r}
@@ -213,7 +236,7 @@ marg_lik_self_categorization_model <- bridge_sampler(samples = fit_self_categori
 marg_lik_descriptive_norm_model <- bridge_sampler(samples = fit_descriptive_norm_model)
 bf(marg_lik_descriptive_norm_model,marg_lik_self_categorization_model)
 ```
-# plot choice for distribution of answers across conditions
+# plot for distribution of answers across conditions
 ```{r}
 
 #install.packages("devtools") 
