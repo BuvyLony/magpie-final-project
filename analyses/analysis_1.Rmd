@@ -236,7 +236,8 @@ analyse_data <- analyse_data %>%
 data_plot<- likert(analyse_data[,"Response to moral dilemma from 'definitely report' to 'definitely leave alone'",drop=FALSE],grouping = analyse_data$both_norms_shown)
 
 
-plot(data_plot)  + theme(axis.text=element_text(color="black",size=9),legend.position="bottom")
-
+plot1 <-plot(data_plot)  + theme(axis.text=element_text(color="black",size=9),legend.position="bottom")
+plot1
+ggsave("plot1.png", height = 30, width = 10)
 ```
 
