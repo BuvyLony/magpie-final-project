@@ -16,14 +16,13 @@ library(bridgesampling)
 library(shiny)
 library(shinystan)
 rstan_options(auto_write = TRUE)
-options(mc.cores = parallel::detectCores())
-set.seed(123)
 
 
 ```
 
 ## read data
-```{r}
+```{r} 
+
 #--Set APA theme to use with ggplot
 theme_set(theme_bw(18)+
             theme(panel.grid.major=element_blank(),
@@ -213,8 +212,15 @@ fit_descriptive_norm_model <- rstan::stan(file = "stan_models/descriptive_norm_m
 marg_lik_self_categorization_model <- bridge_sampler(samples = fit_self_categorization_model)
 marg_lik_descriptive_norm_model <- bridge_sampler(samples = fit_descriptive_norm_model)
 bf(marg_lik_descriptive_norm_model,marg_lik_self_categorization_model)
+```
+# plot choice for distribution of answers across conditions
+```{r}
 
-# plot choice for condition
+#install.packages("devtools") 
+#devtools::install_github('jbryer/likert')
+if(!require(likert)) {
+install.packages("likert") 
+}
 require(likert)
 
 choices = c("1","2","3","4","5","6")
@@ -238,6 +244,7 @@ data_plot<- likert(analyse_data[,"Response to moral dilemma from 'definitely rep
 
 plot1 <-plot(data_plot)  + theme(axis.text=element_text(color="black",size=9),legend.position="bottom")
 plot1
-ggsave("plot1.png", height = 30, width = 10)
+ggsave("plot1.png", height = 10, width = 20)
 ```
+
 
