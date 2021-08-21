@@ -6,6 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
+
 library(tidyverse)
 library(dplyr)
 library(ordinal)
@@ -212,6 +213,30 @@ fit_descriptive_norm_model <- rstan::stan(file = "stan_models/descriptive_norm_m
 marg_lik_self_categorization_model <- bridge_sampler(samples = fit_self_categorization_model)
 marg_lik_descriptive_norm_model <- bridge_sampler(samples = fit_descriptive_norm_model)
 bf(marg_lik_descriptive_norm_model,marg_lik_self_categorization_model)
+
+# plot choice for condition
+require(likert)
+
+choices = c("1","2","3","4","5","6")
+analyse_data[,"moral_dilemma"] = factor(analyse_data[,"moral_dilemma"], levels=1:6, labels=choices, ordered=TRUE)
+
+# code both norms shown 0 to "only ingroup norm shown" and 1 to "Both norms shown"
+for(i in 1:nrow(analyse_data)){
+  if(analyse_data[i,"both_norms_shown"] == 0 ){
+  analyse_data[i,"both_norms_shown"]<- "Only ingroup norm shown"
+  } else {
+    analyse_data[i,"both_norms_shown"] <- "Both norms shown"
+  }
+}
+
+analyse_data <- analyse_data %>%
+  rename(
+    "Response to moral dilemma from 'definitely report' to 'definitely leave alone'" = "moral_dilemma"
+  )
+data_plot<- likert(analyse_data[,"Response to moral dilemma from 'definitely report' to 'definitely leave alone'",drop=FALSE],grouping = analyse_data$both_norms_shown)
+
+
+plot(data_plot)  + theme(axis.text=element_text(color="black",size=9),legend.position="bottom")
 
 ```
 
