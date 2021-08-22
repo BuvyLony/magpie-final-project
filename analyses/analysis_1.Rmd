@@ -203,6 +203,7 @@ analyse_data %>%
             percent_NA = num_NA / n_participants_cleaned)
 
 # age stats
+require(stringi)
 ages <- analyse_data$age %>% stri_remove_empty
 for (i in 1:length(ages)) {
   ages[i] <- substr(ages[i], 1, 2)
