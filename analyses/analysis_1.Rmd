@@ -195,7 +195,7 @@ analyse_data %>% tbl_df %>% rmarkdown::paged_table()
 # gender stats
 analyse_data$gender <- as.character(analyse_data$gender)
 analyse_data %>%
-  summarise(num_females = sum(gender == "female"),
+  summarise(num_females = sum(gender == "female, female"),
             num_males = sum(gender == "male, male"),
             num_non_binary = sum(gender == "non-binary, non-binary"),
             num_NA = sum(gender == "undefined. undefined"),
