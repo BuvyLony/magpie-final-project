@@ -36,6 +36,7 @@ theme_set(theme_bw(18)+
 all_data <- read.csv("./results_260_XPLab-2021-Group3_974857.csv")
 # exclude pilot data
 all_data <- all_data[all_data$submission_id > 2632, ]
+all_data <- all_data[all_data$submission_id != 3051, ]
 
 # total number of participants
 n_participants_raw <- all_data %>% 
