@@ -72,12 +72,6 @@ analyse_data <- subset(analyse_data, select = -c(expected_claim1, expected_claim
 # exclude questions of understanding check
 analyse_data <- analyse_data[analyse_data$trial_name != "custom understanding check", ]
 
-# new labels for better understanding: TODO maybe keep for plotting purposes
-#analyse_data <- mutate(analyse_data, condition = ifelse(ingroup_norm_new ==0 & both_norms_shown ==0, "Ingroup norm favoured calling police, only ingroup norm shown",
-#                                                  ifelse(ingroup_norm_new ==1 & both_norms_shown==0, "Ingroup norm favoured leaving robber alone, only ingroup norm shown",
-#                                                         ifelse(ingroup_norm_new ==1 & both_norms_shown==1, "Ingroup norm favoured leaving robber alone, both norms shown",
-#                                                                ifelse(ingroup_norm_new ==0 & both_norms_shown ==1,"Ingroup norm favoured calling the police, both norms shown",
-#                                                                       NA)))))
 # look at data
 analyse_data %>% tbl_df %>% rmarkdown::paged_table()
 ```
@@ -164,7 +158,7 @@ analyse_data %>% tbl_df %>% rmarkdown::paged_table()
 
 # code issues as numbers 0-8
 for(i in 1:nrow(analyse_data)){
-  if(analyse_data[i,"issue"] == "Gun control"){
+  if((analyse_data[i,"issue"] == "Gun control") | (analyse_data[i,"selected issue"] == "Gun control")){
   analyse_data[i,"issue"]= 0
   } else if (analyse_data[i,"issue"] == "Feminism"){
   analyse_data[i,"issue"]= 1
@@ -199,7 +193,7 @@ analyse_data %>%
   summarise(num_females = sum(gender == "female, female"),
             num_males = sum(gender == "male, male"),
             num_non_binary = sum(gender == "non-binary, non-binary"),
-            num_NA = sum(gender == "undefined. undefined"),
+            num_NA = sum(gender == "undefined, undefined"),
             percent_female = num_females / n_participants_cleaned,
             percent_male = num_males / n_participants_cleaned,
             percent_non_binary = num_non_binary / n_participants_cleaned,
