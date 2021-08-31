@@ -247,12 +247,21 @@ require(likert)
 choices = c("1","2","3","4","5","6")
 analyse_data[,"moral_dilemma"] = factor(analyse_data[,"moral_dilemma"], levels=1:6, labels=choices, ordered=TRUE)
 
+
 # code both norms shown 0 to "only ingroup norm shown" and 1 to "Both norms shown"
+# for(i in 1:nrow(analyse_data)){
+#   if(analyse_data[i,"both_norms_shown"] == 0 ){
+#   analyse_data[i,"both_norms_shown"]<- "Only ingroup norm shown"
+#   } else {
+#     analyse_data[i,"both_norms_shown"] <- "Both norms shown"
+#   }
+# }
+# code ingroup norm -1 into "calling the police and 1 into "do nothing"
 for(i in 1:nrow(analyse_data)){
-  if(analyse_data[i,"both_norms_shown"] == 0 ){
-  analyse_data[i,"both_norms_shown"]<- "Only ingroup norm shown"
+  if(analyse_data[i,"ingroup_norm_new"] == -1 ){
+  analyse_data[i,"ingroup_norm_new"]<- "Calling the police"
   } else {
-    analyse_data[i,"both_norms_shown"] <- "Both norms shown"
+    analyse_data[i,"ingroup_norm_new"] <- "Do nothing"
   }
 }
 
@@ -260,12 +269,27 @@ analyse_data <- analyse_data %>%
   rename(
     "Response to moral dilemma from 'definitely report' to 'definitely leave alone'" = "moral_dilemma"
   )
-data_plot<- likert(analyse_data[,"Response to moral dilemma from 'definitely report' to 'definitely leave alone'",drop=FALSE],grouping = analyse_data$both_norms_shown)
+# make two groups for both_norms_shown and only ingroup norm shown
 
 
-plot1 <-plot(data_plot)  + theme(axis.text=element_text(color="black",size=9),legend.position="bottom")
+# data_call <- split(analyse_data, analyse_data$ingroup_norm_new)[[1]]
+# data_nothing <- split(analyse_data, analyse_data$ingroup_norm_new)[[2]]
+data_only_ingroup <- split(analyse_data, analyse_data$both_norms_shown)[[1]]
+data_both_norms <- split(analyse_data, analyse_data$both_norms_shown)[[2]]
+
+
+data_plot1<- likert(data_only_ingroup[,"Response to moral dilemma from 'definitely report' to 'definitely leave alone'",drop=FALSE],grouping = data_only_ingroup$ingroup_norm_new)
+data_plot2<- likert(data_both_norms[,"Response to moral dilemma from 'definitely report' to 'definitely leave alone'",drop=FALSE],grouping = data_both_norms$ingroup_norm_new)
+
+
+
+plot1 <-plot(data_plot1)  + theme(axis.text=element_text(color="black",size=9),legend.position="bottom")+ ggtitle("only ingroup")
 plot1
 ggsave("plot1.png", height = 10, width = 20)
+
+plot2 <-plot(data_plot2)  + theme(axis.text=element_text(color="black",size=9),legend.position="bottom")+ ggtitle("both norms")
+plot2
+ggsave("plot2.png", height = 10, width = 20)
 ```
 
 
