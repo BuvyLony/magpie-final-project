@@ -283,11 +283,11 @@ data_plot2<- likert(data_both_norms[,"Response to moral dilemma from 'definitely
 
 
 
-plot1 <-plot(data_plot1)  + theme(axis.text=element_text(color="black",size=9),legend.position="bottom")+ ggtitle("only ingroup")
+plot1 <-plot(data_plot1, text.size =7)  + theme(axis.text=element_text(color="black",size=30),legend.position="bottom")+ ggtitle("only ingroup")
 plot1
 ggsave("plot1.png", height = 10, width = 20)
 
-plot2 <-plot(data_plot2)  + theme(axis.text=element_text(color="black",size=9),legend.position="bottom")+ ggtitle("both norms")
+plot2 <-plot(data_plot2, text.size =7)  + theme(axis.text=element_text(color="black",size=30),legend.position="bottom")+ ggtitle("both norms")
 plot2
 ggsave("plot2.png", height = 10, width = 20)
 ```
